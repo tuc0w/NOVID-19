@@ -1,0 +1,12 @@
+{
+    "HEADER_TITLE": "NOVID-19",
+    "HEADER_SUBTITLE": "Die Ergänzung zur Corona-App",
+    "SCANNER_STATUS_TITLE": "Abstandsschätzung:",
+    "SCANNER_STATUS_ACTIVE": "aktiv",
+    "SCANNER_STATUS_INACTIVE": "inaktiv",
+    "STATISTICS": "Kontaktverlauf",
+    "COLLECTED_IDENTIFIER": "Erkannte Kontakte",
+    "CLOSEST_DISTANCE": "Geringster geschätzter Abstand",
+    "LONGER_CONTACTS": "Längere Kontakte",
+    "ACTIVE_CONTACTS": "Kontakte in der Nähe"
+}

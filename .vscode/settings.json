@@ -1,0 +1,11 @@
+{
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "prettier.tabWidth": 4,
+    "workbench.tree.indent": 15,
+    "dart.enableSdkFormatter": false,
+    "[dart]": {
+        "editor.tabSize": 4
+    }
+}
