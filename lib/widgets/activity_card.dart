@@ -3,12 +3,16 @@ import 'package:percent_indicator/percent_indicator.dart';
 
 class ActivityCard extends StatelessWidget {
     final Color cardColor;
+    final Color progressPrimaryColor;
+    final Color progressSecondaryColor;
     final double loadingPercent;
     final String title;
     final String subtitle;
 
     ActivityCard({
         this.cardColor,
+        this.progressPrimaryColor,
+        this.progressSecondaryColor,
         this.loadingPercent,
         this.title,
         this.subtitle,
@@ -25,6 +29,13 @@ class ActivityCard extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: cardColor,
                     borderRadius: BorderRadius.circular(20.0),
+                    boxShadow: [
+                        BoxShadow(
+                            color: Colors.black45.withOpacity(0.3),
+                            spreadRadius: 1,
+                            blurRadius: 6
+                        ),
+                    ]
                 ),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -38,8 +49,8 @@ class ActivityCard extends StatelessWidget {
                                 percent: loadingPercent,
                                 lineWidth: 5.0,
                                 circularStrokeCap: CircularStrokeCap.round,
-                                backgroundColor: Colors.white10,
-                                progressColor: Colors.white,
+                                backgroundColor: progressSecondaryColor,
+                                progressColor: progressPrimaryColor,
                                 center: Text(
                                     '${(loadingPercent*100).round()}%',
                                     style: TextStyle(

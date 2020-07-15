@@ -153,6 +153,8 @@ class _NOVIDState extends State<NOVID> with SingleTickerProviderStateMixin {
                                             ),
                                             XlivSwitch(
                                                 value: scannerState,
+                                                activeColor: DarkColors.success,
+                                                unActiveColor: DarkColors.danger,
                                                 onChanged: (bool state) {
                                                     setState(() {
                                                         scannerState = state;
@@ -275,7 +277,9 @@ class _NOVIDState extends State<NOVID> with SingleTickerProviderStateMixin {
                                                     Row(
                                                         children: <Widget>[
                                                             ActivityCard(
-                                                                cardColor: DarkColors.danger,
+                                                                cardColor: DarkColors.secondary,
+                                                                progressPrimaryColor: DarkColors.danger,
+                                                                progressSecondaryColor: DarkColors.primary,
                                                                 loadingPercent: 1,
                                                                 title: '12:34:45:67:89',
                                                                 subtitle: '15 Minuten',
@@ -284,7 +288,9 @@ class _NOVIDState extends State<NOVID> with SingleTickerProviderStateMixin {
                                                                 width: 20.0
                                                             ),
                                                             ActivityCard(
-                                                                cardColor: DarkColors.warning,
+                                                                cardColor: DarkColors.secondary,
+                                                                progressPrimaryColor: DarkColors.warning,
+                                                                progressSecondaryColor: DarkColors.primary,
                                                                 loadingPercent: 0.79,
                                                                 title: '12:34:45:67:89',
                                                                 subtitle: '13 Minuten!',
@@ -295,7 +301,9 @@ class _NOVIDState extends State<NOVID> with SingleTickerProviderStateMixin {
                                                     Row(
                                                         children: <Widget>[
                                                             ActivityCard(
-                                                                cardColor: DarkColors.success,
+                                                                cardColor: DarkColors.secondary,
+                                                                progressPrimaryColor: DarkColors.success,
+                                                                progressSecondaryColor: DarkColors.primary,
                                                                 loadingPercent: 0.39,
                                                                 title: '12:34:45:67:89',
                                                                 subtitle: '6 Minuten',
@@ -304,7 +312,9 @@ class _NOVIDState extends State<NOVID> with SingleTickerProviderStateMixin {
                                                                 width: 20.0
                                                             ),
                                                             ActivityCard(
-                                                                cardColor: DarkColors.success,
+                                                                cardColor: DarkColors.secondary,
+                                                                progressPrimaryColor: DarkColors.success,
+                                                                progressSecondaryColor: DarkColors.primary,
                                                                 loadingPercent: 0.3,
                                                                 title: '12:34:45:67:89',
                                                                 subtitle: '5 Minuten!',
