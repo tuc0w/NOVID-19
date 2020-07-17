@@ -108,7 +108,7 @@ class RenderActivity extends StatelessWidget {
                     )
                 );
                 tempCards.clear();
-            } else if (i == cards.length || cards.length == 1) {
+            } else if (i == cards.length-1 || cards.length == 1) {
                 rows.add(
                     Row(
                         children: <Widget>[
