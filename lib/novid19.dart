@@ -33,10 +33,14 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
     ExposureNotificationDiscovery _notificationDiscovery = new ExposureNotificationDiscovery();
     MoorIsolate _databaseIsolate;
 
-    Timer _timer;
+    /// ui states
     List exposureDevices = [];
     int _exposureDevicesCount = 0;
     double _lowestDistance = 0.00;
+    Widget _recentActivity = Text('Loading...');
+
+    // bl states
+    Timer _timer;
     bool scannerState = true;
     bool scannerInitialized = false;
 
@@ -55,30 +59,34 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
     void initState() {
         super.initState();
         _initDatabseIsolate();
-        initNotificationDiscovery();
+        _initNotificationDiscovery();
     }
 
     Future<void> _initDatabseIsolate() async {
         _databaseIsolate = await _createMoorIsolate();
-        moor.DatabaseConnection connection = await _databaseIsolate.connect();
+        Room.DatabaseConnection connection = await _databaseIsolate.connect();
         _database = Database.connect(connection);
+        _initDatabaseStreams();
     }
 
-    Future<void> initNotificationDiscovery() async {
-        Timer.periodic(Duration(seconds: 15), (_timer) async {
+    Future<void> _initDatabaseStreams() async {
+        _database.watchAllContacts(
+            from: DateTime.now().subtract(Duration(hours: 1)),
+            to: DateTime.now().add(Duration(hours: 6))
+        ).listen((contactsWithNotifications) {
+            setState(() {
+                _recentActivity = RenderActivity(context, contactsWithNotifications);
+            });
+        });
+    }
+
+    Future<void> _initNotificationDiscovery() async {
+        Timer.periodic(Duration(seconds: 12), (_timer) async {
             if (scannerState) {
                 if (!scannerInitialized) {
                     await _notificationDiscovery.initDatabase(_database);
                     await _notificationDiscovery.initBleManager();
                     scannerInitialized = true;
-                    _database.watchAllContacts(
-                        from: DateTime(2020, 7, 14, 0, 0, 0),
-                        to: DateTime.now()
-                    ).listen((contactsWithNotifications) {
-                        for (var contactWithNotifications in contactsWithNotifications) {
-                            print(contactWithNotifications.contact.identifier);
-                        }
-                    });
                 }
                 exposureDevices = await _notificationDiscovery.getTodaysExposures();
                 double lowestDistance = await _notificationDiscovery.getTodaysLowestDistance();
@@ -236,88 +244,7 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                                                 ],
                                             ),
                                         ),
-                                        Container(
-                                            color: Colors.transparent,
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 20.0, vertical: 10.0),
-                                            child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                    SizedBox(height: 25.0),
-                                                    Row(
-                                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        children: <Widget>[
-                                                            Expanded(
-                                                                child: Container(
-                                                                    margin: const EdgeInsets.only(right: 10.0),
-                                                                    child: Divider(
-                                                                        color: Colors.white,
-                                                                    )
-                                                                ),
-                                                            ),
-                                                            subheading(AppLocalizations.of(context).translate('ACTIVE_CONTACTS')),
-                                                            Expanded(
-                                                                child: Container(
-                                                                    margin: const EdgeInsets.only(left: 10.0),
-                                                                    child: Divider(
-                                                                        color: Colors.white,
-                                                                    )
-                                                                ),
-                                                            ),
-                                                        ],
-                                                    ),
-                                                    SizedBox(height: 15.0),
-                                                    Row(
-                                                        children: <Widget>[
-                                                            ActivityCard(
-                                                                cardColor: DarkColors.secondary,
-                                                                progressPrimaryColor: DarkColors.danger,
-                                                                progressSecondaryColor: DarkColors.primary,
-                                                                loadingPercent: 1,
-                                                                title: '12:34:45:67:89',
-                                                                subtitle: '15 Minuten',
-                                                            ),
-                                                            SizedBox(
-                                                                width: 20.0
-                                                            ),
-                                                            ActivityCard(
-                                                                cardColor: DarkColors.secondary,
-                                                                progressPrimaryColor: DarkColors.warning,
-                                                                progressSecondaryColor: DarkColors.primary,
-                                                                loadingPercent: 0.79,
-                                                                title: '12:34:45:67:89',
-                                                                subtitle: '13 Minuten!',
-                                                            ),
-                                                        ],
-                                                    ),
-                                                    SizedBox(height: 15.0),
-                                                    Row(
-                                                        children: <Widget>[
-                                                            ActivityCard(
-                                                                cardColor: DarkColors.secondary,
-                                                                progressPrimaryColor: DarkColors.success,
-                                                                progressSecondaryColor: DarkColors.primary,
-                                                                loadingPercent: 0.39,
-                                                                title: '12:34:45:67:89',
-                                                                subtitle: '6 Minuten',
-                                                            ),
-                                                            SizedBox(
-                                                                width: 20.0
-                                                            ),
-                                                            ActivityCard(
-                                                                cardColor: DarkColors.secondary,
-                                                                progressPrimaryColor: DarkColors.success,
-                                                                progressSecondaryColor: DarkColors.primary,
-                                                                loadingPercent: 0.3,
-                                                                title: '12:34:45:67:89',
-                                                                subtitle: '5 Minuten!',
-                                                            ),
-                                                        ],
-                                                    )
-                                                ],
-                                            ),
-                                        ),
+                                        _recentActivity,
                                     ],
                                 ),
                             ),
