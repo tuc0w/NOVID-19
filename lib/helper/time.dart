@@ -32,9 +32,9 @@ DateTime getCurrentDateTime() {
     return DateTime.now();
 }
 
-DateTime getTimeFifteenMinutesAgo() {
+DateTime getTimeOneHourAgo() {
     final now = getCurrentDateTime();
-    return now.subtract(Duration(minutes: 15));
+    return now.subtract(Duration(minutes: 60));
 }
 
 DateTime getLastMidnight() {

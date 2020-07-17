@@ -11,6 +11,8 @@ import 'package:moor/moor.dart' as Room;
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+// helper
+import 'package:rxdart/rxdart.dart';
 // ui
 import 'package:NOVID_19/theme/colors/dark_colors.dart';
 import 'package:NOVID_19/widgets/info_column.dart';

@@ -32,12 +32,14 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
     Database _database;
     ExposureNotificationDiscovery _notificationDiscovery = new ExposureNotificationDiscovery();
     MoorIsolate _databaseIsolate;
+    StreamSubscription _contactsSubscription;
 
     /// ui states
     List exposureDevices = [];
     int _exposureDevicesCount = 0;
     double _lowestDistance = 0.00;
     Widget _recentActivity = Text('Loading...');
+    static const _updateDuration = Duration(seconds: 30);
 
     // bl states
     Timer _timer;
@@ -70,14 +72,19 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
     }
 
     Future<void> _initDatabaseStreams() async {
-        _database.watchAllContacts(
-            from: DateTime.now().subtract(Duration(hours: 1)),
-            to: DateTime.now().add(Duration(hours: 6))
-        ).listen((contactsWithNotifications) {
-            setState(() {
-                _recentActivity = RenderActivity(context, contactsWithNotifications);
+        _contactsSubscription = Stream
+            .periodic(_updateDuration)
+            .switchMap((_) {
+                return _database.watchAllContacts(
+                    from: getTimeOneHourAgo(),
+                    to: DateTime.now()
+                );
+            })
+            .listen((contactsWithNotifications) {
+                setState(() {
+                    _recentActivity = RenderActivity(context, contactsWithNotifications);
+                });
             });
-        });
     }
 
     Future<void> _initNotificationDiscovery() async {
@@ -110,9 +117,10 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
 
     @override
     void dispose() {
-        _notificationDiscovery.dispose();
-        _timer.cancel();
-        _databaseIsolate.shutdownAll();
+        _notificationDiscovery?.dispose();
+        _timer?.cancel();
+        _contactsSubscription?.cancel();
+        _databaseIsolate?.shutdownAll();
         super.dispose();
     }
 

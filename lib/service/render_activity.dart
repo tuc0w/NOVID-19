@@ -76,7 +76,6 @@ class RenderActivity extends StatelessWidget {
                     final rssiToContact = {for (var notification in element.notifications) notification.id: notification.rssi};
                     final rssis = rssiToContact.values;
                     final int averageRssi = (rssis.reduce((a, b) => a + b) / rssis.length).round();
-                    // final double averageDistance = calculateDistance(averageRssi);
                     final double averageDistance = roundDouble(calculateDistance(averageRssi), 2);
 
                     cards.add(
@@ -96,8 +95,6 @@ class RenderActivity extends StatelessWidget {
         List tempCards = new List<Widget>();
         for (var i = 0; i < cards.length; i++) {
             tempCards.add(cards[i]);
-            print("Modulo 2 for $i: ${(i % 2 == 0)}");
-            print("Current cards: ${tempCards.length}");
             if (tempCards.isNotEmpty && tempCards.length % 2 == 0) {
                 rows.add(
                     Row(
