@@ -1,6 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'dart:isolate';
+
+// database
+import 'package:moor/isolate.dart';
+import 'package:moor/moor.dart';
 
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -10,7 +15,8 @@ import 'package:NOVID_19/helper/math.dart';
 
 class ExposureNotificationDiscovery {
     BleManager _bleManager = new BleManager();
-    Database _database = new Database();
+    Database _database;
+    MoorIsolate _databaseIsolate;
     PermissionStatus _locationPermissionStatus = PermissionStatus.unknown;
     StreamSubscription<ScanResult> _scanSubscription;
 
@@ -27,7 +33,7 @@ class ExposureNotificationDiscovery {
         _bleManager.stopPeripheralScan();
     }
 
-    void init() {
+    Future<void> initBleManager() async {
         _bleManager
             .createClient()
             .catchError((e) => print("Couldn't create BLE client ${e.toString()}"))
@@ -35,6 +41,12 @@ class ExposureNotificationDiscovery {
             .catchError((e) => print("Permission check error ${e.toString()}"))
             .then((_) => _waitForBluetoothPoweredOn())
             .then((_) => _startExposureScan());
+    }
+
+    Future<void> initDatabase(Database database) async {
+        // _databaseIsolate = MoorIsolate.fromConnectPort(sendPort);
+        // DatabaseConnection connection = await _databaseIsolate.connect();
+        _database = database;
     }
 
     /// Calculates the approximate distance.
@@ -95,6 +107,7 @@ class ExposureNotificationDiscovery {
                     _database.addDiscoveredContact(identifier: deviceId);
                     print("Peripheral ID: ${scanResult.peripheral.identifier}");
                 } else if (exposureDevices.contains(deviceId)) {
+                    distance = roundDouble(distance, 2);
                     print("Still in contact with: ${scanResult.peripheral.identifier}, distance: $distance");
                     if (distance <= _distanceThreshold) {
                         _database.addExposureNotification(identifier: deviceId, rssi: rssi);
@@ -137,6 +150,15 @@ class ExposureNotificationDiscovery {
         return await getLowestDistanceByDate(
             date: new DateTime.now()
         );
+    }
+
+    Future<List> getTodaysContacts() async {
+        final now = DateTime.now();
+        final lastMidnight = new DateTime(now.year, now.month, now.day);
+        final discoveredContacts = await _database.getConfirmedContactsByDate(
+            from: lastMidnight, to: now
+        );
+        return discoveredContacts;
     }
 
     Future<void> refresh() async {

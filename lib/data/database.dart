@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:moor/moor.dart';
-import 'package:moor_flutter/moor_flutter.dart';
+import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:rxdart/rxdart.dart';
 
 part 'database.g.dart';
 
@@ -36,17 +38,6 @@ class ContactWithNotifications {
     ContactWithNotifications(this.contact, this.notifications);
 }
 
-LazyDatabase _openConnection() {
-    return LazyDatabase(() async {
-        final dbFolder = await getApplicationDocumentsDirectory();
-        final dbPath = p.join(dbFolder.path, 'db.sqlite');
-        return FlutterQueryExecutor.inDatabaseFolder(
-            path: dbPath,
-            logStatements: true
-        );
-    });
-}
-
 @UseMoor(
     tables: [
         ExposureNotifications,
@@ -55,7 +46,10 @@ LazyDatabase _openConnection() {
     ]
 )
 class Database extends _$Database {
-    Database() : super(_openConnection());
+    Database() : super(VmDatabase.memory());
+
+    // Isolate connect constructor
+    Database.connect(DatabaseConnection connection) : super.connect(connection);
 
     @override
     int get schemaVersion => 1;
@@ -79,6 +73,13 @@ class Database extends _$Database {
         final discoveredContact = await (
             select(discoveredContacts)
                 ..where((tbl) => tbl.identifier.equals(identifier))
+                ..orderBy([
+                    (tbl) => OrderingTerm(
+                        expression: tbl.date,
+                        mode: OrderingMode.desc
+                    )
+                ])
+                ..limit(1) // this needs to be fixed, there cannot be more than one entry
             ).getSingle();
 
         if (discoveredContact == null) {
@@ -129,10 +130,9 @@ class Database extends _$Database {
         return result?.rssi ?? 0;
     }
 
-    // ConfirmedContacts
-    Future<List<DiscoveredContact>> getAllConfirmedContacts() => select(discoveredContacts).get();
-    Stream<List<DiscoveredContact>> watchAllConfirmedContacts() => select(discoveredContacts).watch();
-    Future insertConfirmedContact(DiscoveredContact confirmedContact) => into(discoveredContacts).insert(confirmedContact);
+    Future<List<DiscoveredContact>> getAllDiscoveredContacts() => select(discoveredContacts).get();
+    Stream<List<DiscoveredContact>> watchAllDiscoveredContacts() => select(discoveredContacts).watch();
+    Future insertDiscoveredContact(DiscoveredContact discoveredContact) => into(discoveredContacts).insert(discoveredContact);
 
     Future<int> addDiscoveredContact({String identifier, DateTime date}) async {
         final _date = date ?? new DateTime.now();
@@ -143,12 +143,49 @@ class Database extends _$Database {
         return await into(discoveredContacts).insert(discoveredContact, mode: InsertMode.insertOrIgnore);
     }
 
-    // DiscoveredContactEntries
     Future addDiscoveredContactEntry({int discoveredContactId, int exposureNotificationId}) async {
         final DiscoveredContactEntry discoveredContactEntry = DiscoveredContactEntry(
             discoveredContact: discoveredContactId,
             exposureNotification: exposureNotificationId
         );
         await into(discoveredContactEntries).insert(discoveredContactEntry);
+    }
+
+    Stream<List<ContactWithNotifications>> watchAllContacts({DateTime from, DateTime to}) {
+        final discoveredContactsStream = (select(discoveredContacts)
+            ..where(
+                (contact) => 
+                    contact.date.isBetweenValues(from, to)
+            )).watch();
+
+        return discoveredContactsStream.switchMap((contacts) {
+            final idToContact = {for (var contact in contacts) contact.id: contact};
+            final ids = idToContact.keys;
+
+            final entryQuery = select(discoveredContactEntries).join(
+                [
+                    innerJoin(
+                        exposureNotifications,
+                        exposureNotifications.id.equalsExp(discoveredContactEntries.exposureNotification),
+                    )
+                ],
+            )..where(discoveredContactEntries.discoveredContact.isIn(ids));
+
+            return entryQuery.watch().map((rows) {
+                final idToNotifications = <int, List<ExposureNotification>>{};
+
+                for (var row in rows) {
+                    final notification = row.readTable(exposureNotifications);
+                    final id = row.readTable(discoveredContactEntries).discoveredContact;
+
+                    idToNotifications.putIfAbsent(id, () => []).add(notification);
+                }
+
+                return [
+                    for (var id in ids)
+                    ContactWithNotifications(idToContact[id], idToNotifications[id] ?? []),
+                ];
+            });
+        });
     }
 }

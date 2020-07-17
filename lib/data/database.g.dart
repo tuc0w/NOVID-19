@@ -747,6 +747,7 @@ class $DiscoveredContactEntriesTable extends DiscoveredContactEntries
 
 abstract class _$Database extends GeneratedDatabase {
   _$Database(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+  _$Database.connect(DatabaseConnection c) : super.connect(c);
   $ExposureNotificationsTable _exposureNotifications;
   $ExposureNotificationsTable get exposureNotifications =>
       _exposureNotifications ??= $ExposureNotificationsTable(this);
