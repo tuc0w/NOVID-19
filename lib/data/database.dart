@@ -26,17 +26,8 @@ class Database extends _$Database {
     Stream<List<ExposureNotification>> watchAllExposureNotifications() => select(exposureNotifications).watch();
     Future insertExposureNotification(ExposureNotification exposureNotification) => into(exposureNotifications).insert(exposureNotification);
 
-    Future addExposureNotification({String identifier, int rssi}) async {
+    Future<void> addExposureNotification({String identifier, int rssi}) async {
         int contactId;
-        final DateTime date = new DateTime.now();
-        final ExposureNotification exposureNotification = new ExposureNotification(
-            identifier: identifier,
-            rssi: rssi,
-            date: date
-        );
-
-        final exposureId = await into(exposureNotifications).insert(exposureNotification);
-
         final discoveredContact = await (
             select(discoveredContacts)
                 ..where((tbl) => tbl.identifier.equals(identifier))
@@ -49,13 +40,17 @@ class Database extends _$Database {
                 ..limit(1) // this needs to be fixed, there cannot be more than one entry
             ).getSingle();
 
-        if (discoveredContact == null) {
-            contactId = await addDiscoveredContact(identifier: identifier);
-        } else {
+        if (discoveredContact != null) {
             contactId = discoveredContact.id;
+            final DateTime date = new DateTime.now();
+            final ExposureNotification exposureNotification = new ExposureNotification(
+                identifier: identifier,
+                rssi: rssi,
+                date: date
+            );
+            final exposureId = await into(exposureNotifications).insert(exposureNotification);
+            await addDiscoveredContactEntry(discoveredContactId: contactId, exposureNotificationId: exposureId);
         }
-
-        await addDiscoveredContactEntry(discoveredContactId: contactId, exposureNotificationId: exposureId);
     }
 
     Future<List> getUniqueExposureNotifications({DateTime date}) async {
@@ -103,11 +98,30 @@ class Database extends _$Database {
 
     Future<int> addDiscoveredContact({String identifier, DateTime date}) async {
         final _date = date ?? new DateTime.now();
-        final DiscoveredContact discoveredContact = new DiscoveredContact(
-            identifier: identifier,
-            date: _date
-        );
-        return await into(discoveredContacts).insert(discoveredContact, mode: InsertMode.insertOrIgnore);
+        int contactId;
+
+        final discoveredContact = await (
+            select(discoveredContacts)
+                ..where((tbl) => tbl.identifier.equals(identifier))
+                ..orderBy([
+                    (tbl) => OrderingTerm(
+                        expression: tbl.date,
+                        mode: OrderingMode.desc
+                    )
+                ])
+                ..limit(1) // this needs to be fixed, there cannot be more than one entry
+            ).getSingle();
+
+        if (discoveredContact == null) {
+            final DiscoveredContact discoveredContact = new DiscoveredContact(
+                identifier: identifier,
+                date: _date
+            );
+            contactId = await into(discoveredContacts).insert(discoveredContact, mode: InsertMode.insertOrIgnore);
+        } else {
+            contactId = discoveredContact.id;
+        }
+        return contactId;
     }
 
     Future addDiscoveredContactEntry({int discoveredContactId, int exposureNotificationId}) async {

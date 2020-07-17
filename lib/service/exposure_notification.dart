@@ -65,7 +65,7 @@ class ExposureNotificationDiscovery {
         }
     }
 
-    Future _startExposureScan() async {
+    Future<void> _startExposureScan() async {
         _scanSubscription =
             _bleManager.startPeripheralScan(
                 uuids: [
@@ -78,8 +78,7 @@ class ExposureNotificationDiscovery {
 
                 if (exposureDevices.isEmpty || !exposureDevices.contains(deviceId)) {
                     exposureDevices.add(deviceId);
-                    // we don't need to persist "contacts" the user encountered just once
-                    // _database.addDiscoveredContact(identifier: deviceId);
+                    _database.addDiscoveredContact(identifier: deviceId);
                     print("New Peripheral ID: ${scanResult.peripheral.identifier}");
                 } else if (exposureDevices.contains(deviceId)) {
                     distance = roundDouble(distance, 2);
