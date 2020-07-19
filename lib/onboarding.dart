@@ -76,7 +76,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         title: "Wasche deine Hände!",
                         body:
                             "Bitte denke an die Hygieneregeln und wasche regelmäßig deine Hände.",
-                        image: _buildImage('handswashing'),
+                        image: _buildImage('handwashing'),
                         decoration: pageDecoration,
                     ),
                     PageViewModel(

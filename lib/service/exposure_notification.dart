@@ -14,7 +14,6 @@ class ExposureNotificationDiscovery {
     Database _database;
     PermissionStatus _locationPermissionStatus = PermissionStatus.unknown;
     StreamSubscription<ScanResult> _scanSubscription;
-    final DateFormat _dateFormatter = DateFormat('HH:mm:ss');
 
     List exposureDevices = [];
     int exposureDevicesCount = 0;
