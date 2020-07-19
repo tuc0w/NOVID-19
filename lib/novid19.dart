@@ -32,19 +32,26 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
     Database _database;
     ExposureNotificationDiscovery _notificationDiscovery = new ExposureNotificationDiscovery();
     MoorIsolate _databaseIsolate;
-    StreamSubscription _contactsSubscription;
+    StreamSubscription _activeContactsSubscription;
+    StreamSubscription _uniqueContactsSubscription;
+    StreamSubscription _lowestDistanceSubscription;
+    StreamSubscription _longestContactsSubscription;
 
     /// ui states
     List exposureDevices = [];
     int _exposureDevicesCount = 0;
     double _lowestDistance = 0.00;
-    Widget _recentActivity = Text('Loading...');
-    static const _updateDuration = Duration(seconds: 30);
+    int _longestContacts = 0;
+    Widget _recentActivity;
+    static const _infoUpdateDuration = Duration(seconds: 12);
+    static const _activityUpdateDuration = Duration(seconds: 15);
+    double _distanceThreshold = 2.0;
 
     // bl states
     Timer _timer;
     bool scannerState = true;
     bool scannerInitialized = false;
+    int _lastScannerUpdate;
 
     Text subheading(String title) {
         return Text(
@@ -72,8 +79,8 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
     }
 
     Future<void> _initDatabaseStreams() async {
-        _contactsSubscription = Stream
-            .periodic(_updateDuration)
+        _activeContactsSubscription = Stream
+            .periodic(_activityUpdateDuration)
             .switchMap((_) {
                 return _database.watchAllContacts(
                     from: getTimeOneHourAgo(),
@@ -83,6 +90,71 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
             .listen((contactsWithNotifications) {
                 setState(() {
                     _recentActivity = RenderActivity(context, contactsWithNotifications);
+                });
+            });
+        
+        _uniqueContactsSubscription = Stream
+            .periodic(_infoUpdateDuration)
+            .switchMap((_) {
+                return _database.watchUniqueContacts(
+                    from: getLastMidnight(),
+                    to: getCurrentDateTime()
+                );
+            })
+            .listen((uniqueContacts) {
+                setState(() {
+                    _exposureDevicesCount = uniqueContacts.length;
+                });
+            });
+        
+        _lowestDistanceSubscription = Stream
+            .periodic(_infoUpdateDuration)
+            .switchMap((_) {
+                return _database.watchLowestExposureDistance(
+                    from: getLastMidnight(),
+                    to: getCurrentDateTime()
+                );
+            })
+            .listen((lowestDistance) {
+                setState(() {
+                    _lowestDistance = roundDouble(calculateDistance(lowestDistance.rssi) ?? 0.00, 2);
+                });
+            });
+        
+        _longestContactsSubscription = Stream
+            .periodic(_infoUpdateDuration)
+            .switchMap((_) {
+                return _database.watchAllContacts(
+                    from: getLastMidnight(),
+                    to: getCurrentDateTime()
+                );
+            })
+            .listen((allContacts) {
+                int tempLongestContacts = 0;
+                allContacts.forEach((element) {
+                    if (
+                        element.notifications.isNotEmpty &&
+                        element.notifications.length > 1
+                    ) {
+                        final firstNotificationDate = element.notifications.first.date;
+                        final lastNotificationDate = element.notifications.last.date;
+                        Duration difference = lastNotificationDate.difference(firstNotificationDate);
+
+                        if (difference.inSeconds >= 180) {
+                            final rssiToContact = {for (var notification in element.notifications) notification.id: notification.rssi};
+                            final rssis = rssiToContact.values;
+                            final int averageRssi = (rssis.reduce((a, b) => a + b) / rssis.length).round();
+                            final double averageDistance = roundDouble(calculateDistance(averageRssi), 2);
+
+                            if (averageDistance <= _distanceThreshold) {
+                                tempLongestContacts++;
+                            }
+                        }
+                    }
+                });
+
+                setState(() {
+                    _longestContacts = tempLongestContacts;
                 });
             });
     }
@@ -95,12 +167,9 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                     await _notificationDiscovery.initBleManager();
                     scannerInitialized = true;
                 }
-                exposureDevices = await _notificationDiscovery.getTodaysExposures();
-                double lowestDistance = await _notificationDiscovery.getTodaysLowestDistance();
-
+                int tempLastScannerUpdate = await _notificationDiscovery.getLastUpdate();
                 setState(() {
-                    _exposureDevicesCount = exposureDevices.length;
-                    _lowestDistance = lowestDistance;
+                    _lastScannerUpdate = tempLastScannerUpdate;
                 });
             } else if(scannerInitialized && !scannerState) {
                 _notificationDiscovery.dispose();
@@ -119,7 +188,10 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
     void dispose() {
         _notificationDiscovery?.dispose();
         _timer?.cancel();
-        _contactsSubscription?.cancel();
+        _activeContactsSubscription?.cancel();
+        _uniqueContactsSubscription?.cancel();
+        _lowestDistanceSubscription?.cancel();
+        _longestContactsSubscription?.cancel();
         _databaseIsolate?.shutdownAll();
         super.dispose();
     }
@@ -171,6 +243,27 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                                                     });
                                                 },
                                             ),
+                                        ],
+                                    ),
+                                    Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                            Text(
+                                                AppLocalizations.of(context).translate('SCANNER_STATUS_UPDATE'),
+                                                style: TextStyle(
+                                                    color: Colors.white70,
+                                                    fontSize: 15.0,
+                                                    fontWeight: FontWeight.w400,
+                                                ),
+                                            ),
+                                            Text(
+                                                "$_lastScannerUpdate ${AppLocalizations.of(context).translate('SECONDS')}",
+                                                style: TextStyle(
+                                                    color: Colors.white70,
+                                                    fontSize: 15.0,
+                                                    fontWeight: FontWeight.w400,
+                                                ),
+                                            )
                                         ],
                                     ),
                                     Padding(
@@ -229,7 +322,7 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                                                         icon: Icons.fingerprint,
                                                         iconBackgroundColor: DarkColors.success,
                                                         title: AppLocalizations.of(context).translate('COLLECTED_IDENTIFIER'),
-                                                        subtitle: "$_exposureDevicesCount",
+                                                        subtitle: ((_exposureDevicesCount == 0) ? "0" : "$_exposureDevicesCount"),
                                                     ),
                                                     SizedBox(
                                                         height: 15.0,
@@ -238,7 +331,7 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                                                         icon: Icons.pan_tool,
                                                         iconBackgroundColor: DarkColors.warning,
                                                         title: AppLocalizations.of(context).translate('CLOSEST_DISTANCE'),
-                                                        subtitle: "$_lowestDistance m",
+                                                        subtitle: ((_lowestDistance == 0) ? "0" : "$_lowestDistance m"),
                                                     ),
                                                     SizedBox(
                                                         height: 15.0
@@ -247,12 +340,48 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                                                         icon: Icons.warning,
                                                         iconBackgroundColor: DarkColors.danger,
                                                         title: AppLocalizations.of(context).translate('LONGER_CONTACTS'),
-                                                        subtitle: '0',
+                                                        subtitle: ((_longestContacts == 0) ? "0" : "$_longestContacts"),
                                                     ),
                                                 ],
                                             ),
                                         ),
-                                        _recentActivity,
+                                        Container(
+                                            color: Colors.transparent,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20.0, vertical: 10.0
+                                            ),
+                                            child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: <Widget>[
+                                                    SizedBox(height: 25.0),
+                                                    Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: <Widget>[
+                                                            Expanded(
+                                                                child: Container(
+                                                                    margin: const EdgeInsets.only(right: 10.0),
+                                                                    child: Divider(
+                                                                        color: Colors.white,
+                                                                    )
+                                                                ),
+                                                            ),
+                                                            subheading(AppLocalizations.of(context).translate('ACTIVE_CONTACTS')),
+                                                            Expanded(
+                                                                child: Container(
+                                                                    margin: const EdgeInsets.only(left: 10.0),
+                                                                    child: Divider(
+                                                                        color: Colors.white,
+                                                                    )
+                                                                ),
+                                                            ),
+                                                        ],
+                                                    ),
+                                                    SizedBox(height: 15.0),
+                                                    _recentActivity ?? Text(AppLocalizations.of(context).translate('LOADING')),
+                                                ],
+                                            ),
+                                        ),
                                     ],
                                 ),
                             ),

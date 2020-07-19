@@ -25,7 +25,7 @@ String formatDuration(Duration d) {
     }
     tokens.add('${seconds}s');
 
-    return tokens.join(':');
+    return tokens.join(' ');
 }
 
 DateTime getCurrentDateTime() {

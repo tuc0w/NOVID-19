@@ -9,50 +9,28 @@ import 'package:NOVID_19/widgets/activity_card.dart';
 class RenderActivity extends StatelessWidget {
     final BuildContext _context;
     final List<ContactWithNotifications> _contactsWithNotifications;
+    final int _maxPercentInSeconds = 900;
+    final int _warningThreshold = 300;
+    final int _dangerThreshold = 600;
 
     RenderActivity(this._context, this._contactsWithNotifications);
 
-    Text subheading(String title) {
-        return Text(
-        title,
-        style: TextStyle(
-            color: Colors.white,
-            fontSize: 20.0,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1.2),
-        );
+    List<Widget> _buildLoadingColumn() {
+        List<Widget> _activityRows = _buildActivityRows(_contactsWithNotifications);
+
+        if (_activityRows.isEmpty) {
+            return <Widget>[
+                Text(AppLocalizations.of(_context).translate('NO_ACTIVE_CONTACTS'))
+            ];
+        }
+
+        return _activityRows;
     }
 
-    Widget _buildHeadlineRow() {
-        return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-                Expanded(
-                    child: Container(
-                        margin: const EdgeInsets.only(right: 10.0),
-                        child: Divider(
-                            color: Colors.white,
-                        )
-                    ),
-                ),
-                subheading(AppLocalizations.of(_context).translate('ACTIVE_CONTACTS')),
-                Expanded(
-                    child: Container(
-                        margin: const EdgeInsets.only(left: 10.0),
-                        child: Divider(
-                            color: Colors.white,
-                        )
-                    ),
-                ),
-            ],
-        );
-    }
-
-    Widget _buildActivityColumn(List<ContactWithNotifications> contactsWithNotifications) {
+    Widget _buildActivityColumn() {
         return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: _buildActivityRows(contactsWithNotifications)
+            children: _buildLoadingColumn()
         );
     }
 
@@ -60,32 +38,34 @@ class RenderActivity extends StatelessWidget {
         List rows = new List<Widget>();
         List cards = new List<Widget>();
 
-        rows.add(SizedBox(height: 25.0));
-        rows.add(_buildHeadlineRow());
-        rows.add(SizedBox(height: 15.0));
-
         contactsWithNotifications.forEach((element) {
             if (element.notifications.isNotEmpty) {
                 final firstNotificationDate = element.notifications.first.date;
                 final lastNotificationDate = element.notifications.last.date;
-
                 Duration difference = lastNotificationDate.difference(firstNotificationDate);
-                print("Contact with ${element.contact.identifier} for ${difference.inSeconds} seconds");
 
                 if (difference.inSeconds >= 180) {
                     final rssiToContact = {for (var notification in element.notifications) notification.id: notification.rssi};
                     final rssis = rssiToContact.values;
                     final int averageRssi = (rssis.reduce((a, b) => a + b) / rssis.length).round();
                     final double averageDistance = roundDouble(calculateDistance(averageRssi), 2);
+                    final double percentIndicator = (1/_maxPercentInSeconds) * difference.inSeconds;
+                    Color progressIndicatorColor = DarkColors.success;
+
+                    if (difference.inSeconds >= _dangerThreshold) {
+                        progressIndicatorColor = DarkColors.danger;
+                    } else if (difference.inSeconds >= _warningThreshold) {
+                        progressIndicatorColor = DarkColors.warning;
+                    }
 
                     cards.add(
                         new ActivityCard(
                             cardColor: DarkColors.secondary,
-                            progressPrimaryColor: DarkColors.success,
+                            progressPrimaryColor: progressIndicatorColor,
                             progressSecondaryColor: DarkColors.primary,
-                            loadingPercent: 0.39,
-                            title: '${element.contact.identifier}',
-                            subtitle: "${formatDuration(difference)} / $averageDistance m",
+                            loadingPercent: percentIndicator,
+                            loadingText: "${formatDuration(difference)}",
+                            title: '$averageDistance m',
                         )
                     );
                 }
@@ -117,25 +97,14 @@ class RenderActivity extends StatelessWidget {
                     )
                 );
                 tempCards.clear();
-                // return rows;
             }
         }
 
         return rows;
     }
 
-    Widget _buildContainer(List<ContactWithNotifications> contactsWithNotifications) {
-        return Container(
-            color: Colors.transparent,
-            padding: EdgeInsets.symmetric(
-                horizontal: 20.0, vertical: 10.0
-            ),
-            child: _buildActivityColumn(contactsWithNotifications)
-        );
-    }
-
     @override
     Widget build(BuildContext context) {
-        return _buildContainer(_contactsWithNotifications);
+        return _buildActivityColumn();
     }
 }

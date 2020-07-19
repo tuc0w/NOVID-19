@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:NOVID_19/helper/time.dart';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:NOVID_19/data/database.dart';
@@ -12,10 +14,12 @@ class ExposureNotificationDiscovery {
     Database _database;
     PermissionStatus _locationPermissionStatus = PermissionStatus.unknown;
     StreamSubscription<ScanResult> _scanSubscription;
+    final DateFormat _dateFormatter = DateFormat('HH:mm:ss');
 
     List exposureDevices = [];
     int exposureDevicesCount = 0;
     double _distanceThreshold = 2.0;
+    DateTime _lastUpdate = DateTime.now();
 
     void dispose() {
         _scanSubscription?.cancel();
@@ -66,6 +70,7 @@ class ExposureNotificationDiscovery {
     }
 
     Future<void> _startExposureScan() async {
+        _lastUpdate = DateTime.now();
         _scanSubscription =
             _bleManager.startPeripheralScan(
                 uuids: [
@@ -84,56 +89,22 @@ class ExposureNotificationDiscovery {
                     distance = roundDouble(distance, 2);
                     print("Still in contact with: ${scanResult.peripheral.identifier}, distance: $distance");
                     if (distance <= _distanceThreshold) {
-                        _database.addExposureNotification(identifier: deviceId, rssi: rssi);
+                        _database.addExposureNotification(
+                            identifier: deviceId,
+                            rssi: rssi,
+                            from: getTimeOneHourAgo(),
+                            to: getCurrentDateTime()
+                        );
                     }
                 }
             });
     }
 
-    Future<List> getAllExposures() async {
-        return await _database.getUniqueExposureNotifications();
+    Future<int> getLastUpdate() async {
+        Duration difference = getCurrentDateTime().difference(_lastUpdate);
+        _lastUpdate = DateTime.now();
+        return difference.inSeconds ?? 0;
     }
-
-    Future<List> getExposuresByDate({DateTime date}) async {
-        return await _database.getUniqueExposureNotifications(
-            date: date
-        );
-    }
-
-    Future<List> getTodaysExposures() async {
-        return await getExposuresByDate(
-            date: new DateTime.now()
-        );
-    }
-
-    Future<double> getLowestDistanceByDate({DateTime date}) async {
-        int lowestRssi = await _database.getLowestExposureDistance(date: date);
-        double distance = calculateDistance(lowestRssi);
-
-        return roundDouble(distance ?? 0.00, 2);
-    }
-
-    Future<double> getLowestDistanceOfAllTime() async {
-        int lowestRssi = await _database.getLowestExposureDistance();
-        double distance = calculateDistance(lowestRssi);
-
-        return roundDouble(distance ?? 0.00, 2);
-    }
-
-    Future<double> getTodaysLowestDistance() async {
-        return await getLowestDistanceByDate(
-            date: new DateTime.now()
-        );
-    }
-
-    // Future<List> getTodaysContacts() async {
-    //     final now = DateTime.now();
-    //     final lastMidnight = new DateTime(now.year, now.month, now.day);
-    //     final discoveredContacts = await _database.getConfirmedContactsByDate(
-    //         from: lastMidnight, to: now
-    //     );
-    //     return discoveredContacts;
-    // }
 
     Future<void> refresh() async {
         _scanSubscription.cancel();

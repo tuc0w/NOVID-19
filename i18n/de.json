@@ -4,9 +4,13 @@
     "SCANNER_STATUS_TITLE": "Abstandsschätzung:",
     "SCANNER_STATUS_ACTIVE": "aktiv",
     "SCANNER_STATUS_INACTIVE": "inaktiv",
+    "SCANNER_STATUS_UPDATE": "letztes Update vor:",
+    "SECONDS": "Sekunden",
     "STATISTICS": "Kontaktverlauf",
     "COLLECTED_IDENTIFIER": "Erkannte Kontakte",
     "CLOSEST_DISTANCE": "Geringster geschätzter Abstand",
     "LONGER_CONTACTS": "Längere Kontakte",
-    "ACTIVE_CONTACTS": "Kontakte in der Nähe"
+    "ACTIVE_CONTACTS": "Kontakte in der Nähe",
+    "NO_ACTIVE_CONTACTS": "Keine aktiven Kontakte gefunden",
+    "LOADING": "Lade.."
 }

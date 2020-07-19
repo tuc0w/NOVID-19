@@ -6,16 +6,16 @@ class ActivityCard extends StatelessWidget {
     final Color progressPrimaryColor;
     final Color progressSecondaryColor;
     final double loadingPercent;
+    final String loadingText;
     final String title;
-    final String subtitle;
 
     ActivityCard({
         this.cardColor,
         this.progressPrimaryColor,
         this.progressSecondaryColor,
         this.loadingPercent,
+        this.loadingText,
         this.title,
-        this.subtitle,
     });
 
     @override
@@ -45,14 +45,14 @@ class ActivityCard extends StatelessWidget {
                             padding: const EdgeInsets.all(10.0),
                             child: CircularPercentIndicator(
                                 animation: true,
-                                radius: 75.0,
+                                radius: 90.0,
                                 percent: loadingPercent,
                                 lineWidth: 5.0,
                                 circularStrokeCap: CircularStrokeCap.round,
                                 backgroundColor: progressSecondaryColor,
                                 progressColor: progressPrimaryColor,
                                 center: Text(
-                                    '${(loadingPercent*100).round()}%',
+                                    loadingText,
                                     style: TextStyle(
                                         fontWeight: FontWeight.w700, color: Colors.white),
                                 ),
@@ -61,20 +61,14 @@ class ActivityCard extends StatelessWidget {
                         Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                                Text(
-                                    title,
-                                    style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                    ),
-                                ),
-                                Text(
-                                    subtitle,
-                                    style: TextStyle(
-                                        fontSize: 12.0,
-                                        color: Colors.white54,
-                                        fontWeight: FontWeight.w400,
+                                FittedBox(
+                                    fit:BoxFit.fitWidth,
+                                    child: Text(
+                                        title,
+                                        style: TextStyle(
+                                            color: Colors.white54,
+                                            fontWeight: FontWeight.w400,
+                                        ),
                                     ),
                                 ),
                             ],

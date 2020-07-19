@@ -26,11 +26,15 @@ class Database extends _$Database {
     Stream<List<ExposureNotification>> watchAllExposureNotifications() => select(exposureNotifications).watch();
     Future insertExposureNotification(ExposureNotification exposureNotification) => into(exposureNotifications).insert(exposureNotification);
 
-    Future<void> addExposureNotification({String identifier, int rssi}) async {
+    Future<void> addExposureNotification({String identifier, int rssi, DateTime from, DateTime to}) async {
         int contactId;
         final discoveredContact = await (
             select(discoveredContacts)
-                ..where((tbl) => tbl.identifier.equals(identifier))
+                ..where(
+                    (tbl) =>
+                        tbl.identifier.equals(identifier) &
+                        tbl.date.isBetweenValues(from, to)
+                )
                 ..orderBy([
                     (tbl) => OrderingTerm(
                         expression: tbl.date,
@@ -53,43 +57,28 @@ class Database extends _$Database {
         }
     }
 
-    Future<List> getUniqueExposureNotifications({DateTime date}) async {
-        final query = selectOnly(exposureNotifications)
-            ..addColumns([exposureNotifications.identifier])
-            ..groupBy([exposureNotifications.identifier]);
-        
-        if (date != null) {
-            query..where(
-                exposureNotifications.date.year.equals(date.year) &
-                exposureNotifications.date.month.equals(date.month) &
-                exposureNotifications.date.day.equals(date.day)
-            );
-        }
-        
-        return await query.get();
+    Stream<List<DiscoveredContact>> watchUniqueContacts({DateTime from, DateTime to}) {
+        return (select(discoveredContacts)
+            ..where(
+                (contact) => 
+                    contact.date.isBetweenValues(from, to)
+            )).watch();
     }
 
-    Future<int> getLowestExposureDistance({DateTime date}) async {
-        final query = select(exposureNotifications)
+    Stream<ExposureNotification> watchLowestExposureDistance({DateTime from, DateTime to}) {
+        return (select(exposureNotifications)
             ..orderBy([
                 (tbl) => OrderingTerm(
                     expression: tbl.rssi,
                     mode: OrderingMode.desc
                 )
             ])
-            ..limit(1);
-
-        if (date != null) {
-            query..where((a) => 
-                exposureNotifications.date.year.equals(date.year) &
-                exposureNotifications.date.month.equals(date.month) &
-                exposureNotifications.date.day.equals(date.day)
-            );
-        }
-
-        final result = await query.getSingle();
-
-        return result?.rssi ?? 0;
+            ..where(
+                (notification) => 
+                    notification.date.isBetweenValues(from, to)
+            )
+            ..limit(1)
+        ).watchSingle();
     }
 
     Future<List<DiscoveredContact>> getAllDiscoveredContacts() => select(discoveredContacts).get();
