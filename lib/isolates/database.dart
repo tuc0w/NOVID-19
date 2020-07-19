@@ -1,5 +1,5 @@
 
-part of '../main.dart';
+part of '../novid19.dart';
 
 Future<MoorIsolate> _createMoorIsolate() async {
     // this method is called from the main isolate. Since we can't use

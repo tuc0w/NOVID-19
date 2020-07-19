@@ -84,10 +84,8 @@ class ExposureNotificationDiscovery {
                 if (exposureDevices.isEmpty || !exposureDevices.contains(deviceId)) {
                     exposureDevices.add(deviceId);
                     _database.addDiscoveredContact(identifier: deviceId);
-                    print("New Peripheral ID: ${scanResult.peripheral.identifier}");
                 } else if (exposureDevices.contains(deviceId)) {
                     distance = roundDouble(distance, 2);
-                    print("Still in contact with: ${scanResult.peripheral.identifier}, distance: $distance");
                     if (distance <= _distanceThreshold) {
                         _database.addExposureNotification(
                             identifier: deviceId,
