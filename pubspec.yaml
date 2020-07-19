@@ -31,6 +31,7 @@ dependencies:
   fab_circular_menu: ^1.0.0
   flutter_ble_lib: ^2.2.5
   flutter_launcher_icons: ^0.7.5
+  flutter_native_splash: ^0.1.9
   font_awesome_flutter: ^8.8.1
   introduction_screen: ^1.0.7
   moor_ffi: ^0.7.0
