@@ -205,78 +205,71 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                 child: Column(
                     children: <Widget>[
                         TopContainer(
-                            height: 130,
+                            height: 150,
                             width: width,
                             color: DarkColors.secondary,
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                    Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: <Widget>[
-                                            LogoColumn(
-                                                image: "assets/icon/icon.png",
-                                                imageBackgroundColor: Colors.transparent,
-                                                title: AppLocalizations.of(context).translate('HEADER_TITLE'),
-                                                subtitle: AppLocalizations.of(context).translate('HEADER_SUBTITLE')
-                                            ),
-                                        ],
-                                    ),
-                                    Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                            Text(
-                                                AppLocalizations.of(context).translate('SCANNER_STATUS_TITLE'),
-                                                style: TextStyle(
-                                                    fontSize: 18.0,
-                                                    color: Colors.white70,
-                                                    fontWeight: FontWeight.w800,
+                            child: Padding(
+                                padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                        Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: <Widget>[
+                                                LogoColumn(
+                                                    image: "assets/icon/icon.png",
+                                                    imageBackgroundColor: Colors.transparent,
+                                                    title: AppLocalizations.of(context).translate('HEADER_TITLE'),
+                                                    subtitle: AppLocalizations.of(context).translate('HEADER_SUBTITLE')
                                                 ),
-                                            ),
-                                            XlivSwitch(
-                                                value: scannerState,
-                                                activeColor: DarkColors.success,
-                                                unActiveColor: DarkColors.danger,
-                                                onChanged: (bool state) {
-                                                    setState(() {
-                                                        scannerState = state;
-                                                    });
-                                                },
-                                            ),
-                                        ],
-                                    ),
-                                    Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                            Text(
-                                                AppLocalizations.of(context).translate('SCANNER_STATUS_UPDATE'),
-                                                style: TextStyle(
-                                                    color: Colors.white70,
-                                                    fontSize: 15.0,
-                                                    fontWeight: FontWeight.w400,
-                                                ),
-                                            ),
-                                            Text(
-                                                "$_lastScannerUpdate ${AppLocalizations.of(context).translate('SECONDS')}",
-                                                style: TextStyle(
-                                                    color: Colors.white70,
-                                                    fontSize: 15.0,
-                                                    fontWeight: FontWeight.w400,
-                                                ),
-                                            )
-                                        ],
-                                    ),
-                                    Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 0, vertical: 0.0
+                                            ],
                                         ),
-                                        child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            children: <Widget>[],
+                                        Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                                Text(
+                                                    AppLocalizations.of(context).translate('SCANNER_STATUS_TITLE'),
+                                                    style: TextStyle(
+                                                        fontSize: 18.0,
+                                                        color: Colors.white70,
+                                                        fontWeight: FontWeight.w800,
+                                                    ),
+                                                ),
+                                                XlivSwitch(
+                                                    value: scannerState,
+                                                    activeColor: DarkColors.success,
+                                                    unActiveColor: DarkColors.danger,
+                                                    onChanged: (bool state) {
+                                                        setState(() {
+                                                            scannerState = state;
+                                                        });
+                                                    },
+                                                ),
+                                            ],
                                         ),
-                                    )
-                                ]
+                                        Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                                Text(
+                                                    AppLocalizations.of(context).translate('SCANNER_STATUS_UPDATE'),
+                                                    style: TextStyle(
+                                                        color: Colors.white70,
+                                                        fontSize: 15.0,
+                                                        fontWeight: FontWeight.w400,
+                                                    ),
+                                                ),
+                                                Text(
+                                                    "$_lastScannerUpdate ${AppLocalizations.of(context).translate('SECONDS')}",
+                                                    style: TextStyle(
+                                                        color: Colors.white70,
+                                                        fontSize: 15.0,
+                                                        fontWeight: FontWeight.w400,
+                                                    ),
+                                                ),
+                                            ],
+                                        ),
+                                    ]
+                                ),
                             ),
                         ),
                         Expanded(

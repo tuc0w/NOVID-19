@@ -65,7 +65,8 @@ class RenderActivity extends StatelessWidget {
                             progressSecondaryColor: DarkColors.primary,
                             loadingPercent: percentIndicator,
                             loadingText: "${formatDuration(difference)}",
-                            title: '$averageDistance m',
+                            title:  AppLocalizations.of(_context).translate('AVERAGE_DISTANCE'),
+                            subtitle: '$averageDistance m',
                         )
                     );
                 }

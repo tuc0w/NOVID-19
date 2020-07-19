@@ -126,7 +126,13 @@ class Database extends _$Database {
             ..where(
                 (contact) => 
                     contact.date.isBetweenValues(from, to)
-            )).watch();
+            )..orderBy([
+                (contact) => OrderingTerm(
+                    expression: contact.date,
+                    mode: OrderingMode.desc
+                )
+            ])
+            ).watch();
 
         return discoveredContactsStream.switchMap((contacts) {
             final idToContact = {for (var contact in contacts) contact.id: contact};

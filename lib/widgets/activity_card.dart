@@ -8,6 +8,7 @@ class ActivityCard extends StatelessWidget {
     final double loadingPercent;
     final String loadingText;
     final String title;
+    final String subtitle;
 
     ActivityCard({
         this.cardColor,
@@ -16,6 +17,7 @@ class ActivityCard extends StatelessWidget {
         this.loadingPercent,
         this.loadingText,
         this.title,
+        this.subtitle,
     });
 
     @override
@@ -44,7 +46,7 @@ class ActivityCard extends StatelessWidget {
                         Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: CircularPercentIndicator(
-                                animation: true,
+                                animation: false,
                                 radius: 90.0,
                                 percent: loadingPercent,
                                 lineWidth: 5.0,
@@ -65,6 +67,16 @@ class ActivityCard extends StatelessWidget {
                                     fit:BoxFit.fitWidth,
                                     child: Text(
                                         title,
+                                        style: TextStyle(
+                                            color: Colors.white54,
+                                            fontWeight: FontWeight.w400,
+                                        ),
+                                    ),
+                                ),
+                                FittedBox(
+                                    fit:BoxFit.fitWidth,
+                                    child: Text(
+                                        subtitle,
                                         style: TextStyle(
                                             color: Colors.white54,
                                             fontWeight: FontWeight.w400,
