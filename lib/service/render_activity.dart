@@ -50,7 +50,7 @@ class RenderActivity extends StatelessWidget {
                     final rssis = rssiToContact.values;
                     final int averageRssi = (rssis.reduce((a, b) => a + b) / rssis.length).round();
                     final double averageDistance = roundDouble(calculateDistance(averageRssi), 2);
-                    final double percentIndicator = min((1/_maxPercentInSeconds) * difference.inSeconds, 1);
+                    final double percentIndicator = min((1/_maxPercentInSeconds) * difference.inSeconds, 1.0);
                     Color progressIndicatorColor = DarkColors.success;
 
                     if (difference.inSeconds >= _dangerThreshold) {
