@@ -10,6 +10,7 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
     StreamSubscription _longestContactsSubscription;
 
     /// ui states
+    final GlobalKey<FabCircularMenuState> _fabKey = GlobalKey();
     List exposureDevices = [];
     int _exposureDevicesCount = 0;
     double _lowestDistance = 0.00;
@@ -19,22 +20,11 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
     static const _activityUpdateDuration = Duration(seconds: 15);
     double _distanceThreshold = 2.0;
 
-    // bl states
+    /// bl states
     Timer _timer;
     bool scannerState = true;
     bool scannerInitialized = false;
     int _lastScannerUpdate;
-
-    Text subheading(String title) {
-        return Text(
-        title,
-        style: TextStyle(
-            color: Colors.white,
-            fontSize: 20.0,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1.2),
-        );
-    }
 
     @override
     void initState() {
@@ -271,7 +261,7 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                                                                         )
                                                                     ),
                                                                 ),
-                                                                subheading(AppLocalizations.of(context).translate('STATISTICS')),
+                                                                Subheading(color: Colors.white, title: AppLocalizations.of(context).translate('STATISTICS')),
                                                                 Expanded(
                                                                     child: Container(
                                                                         margin: const EdgeInsets.only(left: 10.0),
@@ -333,7 +323,7 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                                                                         )
                                                                     ),
                                                                 ),
-                                                                subheading(AppLocalizations.of(context).translate('ACTIVE_CONTACTS')),
+                                                                Subheading(color: Colors.white, title: AppLocalizations.of(context).translate('ACTIVE_CONTACTS')),
                                                                 Expanded(
                                                                     child: Container(
                                                                         margin: const EdgeInsets.only(left: 10.0),
@@ -355,6 +345,41 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                             ),
                         ],
                     ),
+                ),
+                floatingActionButton: FabCircularMenu(
+                    animationCurve: Curves.easeInOutCirc,
+                    animationDuration: const Duration(milliseconds: 300),
+                    fabColor: DarkColors.secondary,
+                    fabOpenIcon: Icon(Icons.menu, color: Colors.white),
+                    fabCloseIcon: Icon(Icons.close, color: Colors.white),
+                    key: _fabKey,
+                    ringColor: Colors.white.withAlpha(30),
+                    ringDiameter: 360.0,
+                    ringWidth: 72.0,
+                    children: <Widget>[
+                        RawMaterialButton(
+                            child: FaIcon(FontAwesomeIcons.trophy, color: Colors.white),
+                            onPressed: () {
+                                _fabKey.currentState.close();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CreditsScreen()
+                                    ),
+                                );
+                            },
+                            padding: const EdgeInsets.all(24.0),
+                            shape: CircleBorder(),
+                        ),
+                        RawMaterialButton(
+                            child: FaIcon(FontAwesomeIcons.userShield, color: Colors.white),
+                            onPressed: () {
+                                _fabKey.currentState.close();
+                            },
+                            padding: const EdgeInsets.all(24.0),
+                            shape: CircleBorder(),
+                        ),
+                    ],
                 ),
             ),
             onWillPop: () async => false,
