@@ -6,8 +6,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:NOVID_19/onboarding.dart';
 import 'package:NOVID_19/novid19.dart';
 
+bool onboarded = false;
+
 void main() async {
     WidgetsFlutterBinding.ensureInitialized();
+    await SharedPreferences.getInstance().then((prefs) {
+        onboarded = prefs.getBool('onboarded') ?? false;
+    });
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
         .then((_) => runApp(Novid19App()));
 }
@@ -18,8 +23,6 @@ class Novid19App extends StatefulWidget {
 }
 
 class _Novid19AppState extends State<Novid19App> {
-    static bool onboarded = false;
-
     final routes = <String, WidgetBuilder>{
         Novid19Screen.tag: (context) => Novid19Screen(),
         OnBoardingScreen.tag: (context) => OnBoardingScreen(),
@@ -28,13 +31,6 @@ class _Novid19AppState extends State<Novid19App> {
     @override
     void initState() {
         super.initState();
-        initSharedPreferences();
-    }
-
-    Future<void> initSharedPreferences() async {
-        await SharedPreferences.getInstance().then((prefs) {
-            onboarded = prefs.getBool('onboarded') ?? false;
-        });
     }
 
     @override
@@ -47,12 +43,7 @@ class _Novid19AppState extends State<Novid19App> {
             title: 'NOVID-19',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-                brightness: Brightness.light,
-                primarySwatch: Colors.blue,
-                floatingActionButtonTheme: FloatingActionButtonThemeData(
-                    backgroundColor: Colors.cyan,
-                    foregroundColor: Colors.white,
-                ),
+                brightness: Brightness.dark,
             ),
             home: Builder(builder: (context) {
                 if (!onboarded) {

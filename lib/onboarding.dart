@@ -21,7 +21,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
     void _onIntroEnd(context) async {
         await SharedPreferences.getInstance().then((prefs) {
-            prefs.setBool('onboarded', false);
+            prefs.setBool('onboarded', true);
         });
 
         Navigator.of(context).push(
