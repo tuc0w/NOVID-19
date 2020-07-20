@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:NOVID_19/data/database.dart';
 import 'package:NOVID_19/helper/localization.dart';
@@ -49,7 +50,7 @@ class RenderActivity extends StatelessWidget {
                     final rssis = rssiToContact.values;
                     final int averageRssi = (rssis.reduce((a, b) => a + b) / rssis.length).round();
                     final double averageDistance = roundDouble(calculateDistance(averageRssi), 2);
-                    final double percentIndicator = (1/_maxPercentInSeconds) * difference.inSeconds;
+                    final double percentIndicator = min((1/_maxPercentInSeconds) * difference.inSeconds, 1);
                     Color progressIndicatorColor = DarkColors.success;
 
                     if (difference.inSeconds >= _dangerThreshold) {
