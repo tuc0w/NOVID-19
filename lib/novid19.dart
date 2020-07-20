@@ -15,9 +15,12 @@ import 'package:path/path.dart' as p;
 import 'package:NOVID_19/helper/math.dart';
 import 'package:rxdart/rxdart.dart';
 // ui
+import 'package:fab_circular_menu/fab_circular_menu.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:NOVID_19/theme/colors/dark_colors.dart';
 import 'package:NOVID_19/widgets/info_column.dart';
 import 'package:NOVID_19/widgets/logo_column.dart';
+import 'package:NOVID_19/widgets/subheading.dart';
 import 'package:NOVID_19/widgets/top_container.dart';
 import 'package:xlive_switch/xlive_switch.dart';
 // novid
@@ -26,6 +29,9 @@ import 'package:NOVID_19/helper/localization.dart';
 import 'package:NOVID_19/helper/time.dart';
 import 'package:NOVID_19/service/render_activity.dart';
 import 'package:NOVID_19/service/exposure_notification.dart';
+
+// screens
+import 'package:NOVID_19/credits.dart';
 
 part 'package:NOVID_19/isolates/database.dart';
 part 'package:NOVID_19/part/novid19.dart';
