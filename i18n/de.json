@@ -13,5 +13,8 @@
     "ACTIVE_CONTACTS": "Kontakte in der Nähe",
     "NO_ACTIVE_CONTACTS": "Keine aktiven Kontakte gefunden",
     "AVERAGE_DISTANCE": "Ø Abstand:",
-    "LOADING": "Lade.."
+    "LOADING": "Lade..",
+    "CREDITS_TITLE": "Credits",
+    "CREDITS_PEOPLE_LABEL": "Personen die mich während der Entwicklung sehr unterstützt und inspiriert haben",
+    "CREDITS_ASSETS_LABEL": "Alle eingesetzten Grafiken stammen von"
 }
