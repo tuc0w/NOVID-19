@@ -28,7 +28,7 @@ class CreditsScreen extends StatelessWidget {
             home: Scaffold(
                 appBar: AppBar(
                     centerTitle: true,
-                    title: Text('Credits'),
+                    title: Text(AppLocalizations.of(context).translate('CREDITS_TITLE')),
                 ),
                 body: Scaffold(
                     backgroundColor: DarkColors.primary,
@@ -42,7 +42,8 @@ class CreditsScreen extends StatelessWidget {
                                                 Container(
                                                     color: Colors.transparent,
                                                     padding: EdgeInsets.symmetric(
-                                                        horizontal: 20.0, vertical: 10.0),
+                                                        horizontal: 20.0, vertical: 10.0
+                                                    ),
                                                     child: Column(
                                                         children: <Widget>[
                                                             SizedBox(
@@ -54,7 +55,7 @@ class CreditsScreen extends StatelessWidget {
                                                                 children: <Widget>[
                                                                     Flexible(
                                                                         child: Text(
-                                                                            'Diese Personen haben mich maßgeblich während der Entwicklung unterstützt:',
+                                                                            AppLocalizations.of(context).translate('CREDITS_PEOPLE_LABEL'),
                                                                             style: TextStyle(
                                                                                 color: Colors.white,
                                                                                 fontSize: 18.0,
@@ -91,7 +92,7 @@ class CreditsScreen extends StatelessWidget {
                                                                 children: <Widget>[
                                                                     Flexible(
                                                                         child: Text(
-                                                                            'Alle eingesetzten Grafiken stammen von:',
+                                                                            AppLocalizations.of(context).translate('CREDITS_ASSETS_LABEL'),
                                                                             style: TextStyle(
                                                                                 color: Colors.white,
                                                                                 fontSize: 18.0,

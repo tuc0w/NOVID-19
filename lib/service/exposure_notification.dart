@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:NOVID_19/helper/time.dart';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
-import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:NOVID_19/data/database.dart';
