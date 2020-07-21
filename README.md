@@ -5,8 +5,8 @@
 
 ## Credits
 People who helped me a lot during development:
-- Kristina Vogel
-- DelirusMedia
+- [Kristina Vogel](https://www.instagram.com/birdkris)
+- [DelirusMedia](https://twitter.com/DelirusMedia)
 
 Graphics used in this project are provided by:
 - [Freepik](https://freepik.com)
