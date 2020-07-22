@@ -16,5 +16,16 @@
     "LOADING": "Lade..",
     "CREDITS_TITLE": "Credits",
     "CREDITS_PEOPLE_LABEL": "Personen die mich während der Entwicklung sehr unterstützt und inspiriert haben",
-    "CREDITS_ASSETS_LABEL": "Alle eingesetzten Grafiken stammen von"
+    "CREDITS_ASSETS_LABEL": "Alle eingesetzten Grafiken stammen von",
+    "ONBOARDING_PAGE_1_TITLE": "Deine Hilfe ist gefragt!",
+    "ONBOARDING_PAGE_1_TEXT": "Damit das aktuell kursierende Coronavirus so schnell wie möglich besiegt werden kann sind wir alle dazu angehalten genügend Abstand zu anderen Menschen zu halten. NOVID-19 möchte dich dabei unterstützen.",
+    "ONBOARDING_PAGE_2_TITLE": "Tracke deine täglichen Kontakte",
+    "ONBOARDING_PAGE_2_TEXT": "Für einen besseren Überblick deiner täglichen Kontakte, trackt die App alle deine Kontakte mit Personen die die Corona-App verwenden und zeigt die dir in einer Übersicht an.",
+    "ONBOARDING_PAGE_2_FOOTER": "Damit die App deine Kontakte tracken kann, lass sie bitte im Hintergrund laufen und beende sie nicht.",
+    "ONBOARDING_PAGE_3_TITLE": "Erkenne lange Kontakte",
+    "ONBOARDING_PAGE_3_TEXT": "Um dich selbst besser schützen zu können, solltest du längere Kontakte vermeiden, die App hilft dir dabei die Länge der Kontakte in deiner Nähe zu erkennen.",
+    "ONBOARDING_PAGE_4_TITLE": "Das braucht die App von dir",
+    "ONBOARDING_PAGE_4_TEXT": "Um deine Kontakte verfolgen zu können muss die App auf deine Standortdaten zugreifen, sie sind nötig um über Bluetooth nach anderen Geräten suchen zu können, die App wird niemals auf dein GPS zugreifen!",
+    "ONBOARDING_PAGE_5_TITLE": "Updates",
+    "ONBOARDING_PAGE_5_TEXT": "In den kommenden Wochen wird es einige Updates geben, ein großes Feature wird dabei die Kalenderansicht der Kontakte sein."
 }

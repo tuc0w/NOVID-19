@@ -59,37 +59,32 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 key: introKey,
                 pages: [
                     PageViewModel(
-                        title: "Danke!",
-                        body:
-                            "Für deine Hilfe im Kampf gegen COVID-19.",
+                        title: "Deine Hilfe ist gefragt!",
+                        body: "Damit das aktuell kursierende Coronavirus so schnell wie möglich besiegt werden kann sind wir alle dazu angehalten genügend Abstand zu anderen Menschen zu halten. NOVID-19 möchte dich dabei unterstützen.",
                         image: _buildImage('fighting-coronavirus'),
                         decoration: pageDecoration,
                     ),
                     PageViewModel(
-                        title: "Halte Abstand!",
-                        body:
-                            "Mit NOVID-19 kannst du deine Kontakte verfolgen und immer einsehen wie viele längere Kontakte du hattest. Bitte denke daran dass die Entfernungen nur geschätzt werden können",
-                        image: _buildImage('social-distancing'),
+                        title: "Deine täglichen Kontakte",
+                        body: "Für einen besseren Überblick, trackt die App alle Kontakte mit Personen die die Corona-App verwenden und zeigt sie dir an.\n\nDamit deine Kontakte getracked werden können, lass die App bitte im Hintergrund laufen und beende sie nicht.",
+                        image: _buildImage('daily_contacts'),
                         decoration: pageDecoration,
                     ),
                     PageViewModel(
-                        title: "Wasche deine Hände!",
-                        body:
-                            "Bitte denke an die Hygieneregeln und wasche regelmäßig deine Hände.",
-                        image: _buildImage('handwashing'),
+                        title: "Erkenne lange Kontakte",
+                        body: "Um dich selbst besser schützen zu können, solltest du längere Kontakte vermeiden. NOVID-19 hilft dir dabei die Länge der Kontakte in deiner Nähe zu erkennen.",
+                        image: _buildImage('nearest_contacts'),
                         decoration: pageDecoration,
                     ),
                     PageViewModel(
-                        title: "Was passiert mit deinen Daten?",
-                        body:
-                            "Deine Daten verlassen zu keinem Zeitpunkt dein Smartphone, die App kommuniziert nicht mit dem Internet und versendet keine Daten.",
+                        title: "Das braucht die App",
+                        body: "Um Kontakte verfolgen zu können muss NOVID-19 auf deine Standortdaten zugreifen, sie sind nötig um über Bluetooth nach anderen Geräten zu suchen, die App wird dabei niemals auf dein GPS zugreifen!",
                         image: _buildImage('data'),
                         decoration: pageDecoration,
                     ),
                     PageViewModel(
-                        title: "Bleib positiv!",
-                        body:
-                            "",
+                        title: "Updates",
+                        body: "In den kommenden Wochen wird es einige Updates geben, ein großes Feature wird dabei die Kalenderansicht der Kontakte und das erkennen von Autofahrten sein.",
                         image: _buildImage('stay-positive'),
                         decoration: pageDecoration,
                     ),
