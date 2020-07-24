@@ -4,6 +4,8 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
     Database _database;
     ExposureNotificationDiscovery _notificationDiscovery = new ExposureNotificationDiscovery();
     MoorIsolate _databaseIsolate;
+
+    // streams
     StreamSubscription _activeContactsSubscription;
     StreamSubscription _uniqueContactsSubscription;
     StreamSubscription _lowestDistanceSubscription;
@@ -16,11 +18,16 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
     double _lowestDistance = 0.00;
     int _longestContacts = 0;
     Widget _recentActivity;
-    static const _infoUpdateDuration = Duration(seconds: 12);
-    static const _activityUpdateDuration = Duration(seconds: 15);
+
+    // thresholds
     double _distanceThreshold = 2.0;
 
-    /// bl states
+    // update durations
+    static const _activityUpdateDuration = Duration(seconds: 15);
+    static const _infoUpdateDuration = Duration(seconds: 6);
+    static const _notificationDiscoveryUpdateDuration = Duration(seconds: 12);
+
+    /// ble states
     Timer _timer;
     bool scannerState = true;
     bool scannerInitialized = false;
@@ -122,7 +129,7 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
     }
 
     Future<void> _initNotificationDiscovery() async {
-        Timer.periodic(Duration(seconds: 12), (_timer) async {
+        Timer.periodic(_notificationDiscoveryUpdateDuration, (_timer) async {
             if (scannerState) {
                 if (!scannerInitialized) {
                     await _notificationDiscovery.initDatabase(_database);
@@ -223,7 +230,7 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                                                         ),
                                                     ),
                                                     Text(
-                                                        "$_lastScannerUpdate ${AppLocalizations.of(context).translate('SECONDS')}",
+                                                        ((_lastScannerUpdate != null) ? "$_lastScannerUpdate ${AppLocalizations.of(context).translate('SECONDS')}" : AppLocalizations.of(context).translate('LOADING')),
                                                         style: TextStyle(
                                                             color: Colors.white70,
                                                             fontSize: 15.0,
@@ -279,7 +286,7 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                                                             icon: Icons.fingerprint,
                                                             iconBackgroundColor: DarkColors.success,
                                                             title: AppLocalizations.of(context).translate('COLLECTED_IDENTIFIER'),
-                                                            subtitle: ((_exposureDevicesCount == 0) ? "0" : "$_exposureDevicesCount"),
+                                                            subtitle: ((_exposureDevicesCount == 0) ? AppLocalizations.of(context).translate('LOADING') : "$_exposureDevicesCount"),
                                                         ),
                                                         SizedBox(
                                                             height: 15.0,
@@ -288,7 +295,7 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                                                             icon: Icons.pan_tool,
                                                             iconBackgroundColor: DarkColors.warning,
                                                             title: AppLocalizations.of(context).translate('CLOSEST_DISTANCE'),
-                                                            subtitle: ((_lowestDistance == 0) ? "0" : "$_lowestDistance m"),
+                                                            subtitle: ((_lowestDistance == 0) ? AppLocalizations.of(context).translate('LOADING') : "$_lowestDistance m"),
                                                         ),
                                                         SizedBox(
                                                             height: 15.0
@@ -297,7 +304,7 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                                                             icon: Icons.warning,
                                                             iconBackgroundColor: DarkColors.danger,
                                                             title: AppLocalizations.of(context).translate('LONGER_CONTACTS'),
-                                                            subtitle: ((_longestContacts == 0) ? "0" : "$_longestContacts"),
+                                                            subtitle: ((_longestContacts == 0) ? AppLocalizations.of(context).translate('LOADING') : "$_longestContacts"),
                                                         ),
                                                     ],
                                                 ),
@@ -375,6 +382,12 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                             child: FaIcon(FontAwesomeIcons.userShield, color: Colors.white),
                             onPressed: () {
                                 _fabKey.currentState.close();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PrivacyScreen()
+                                    ),
+                                );
                             },
                             padding: const EdgeInsets.all(24.0),
                             shape: CircleBorder(),
