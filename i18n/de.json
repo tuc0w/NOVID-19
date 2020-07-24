@@ -8,7 +8,7 @@
     "SECONDS": "Sekunden",
     "STATISTICS": "Kontaktverlauf",
     "COLLECTED_IDENTIFIER": "Erkannte Kontakte",
-    "CLOSEST_DISTANCE": "Geringster geschätzter Abstand",
+    "CLOSEST_DISTANCE": "Geringster Abstand",
     "LONGER_CONTACTS": "Längere Kontakte",
     "ACTIVE_CONTACTS": "Kontakte in der Nähe",
     "NO_ACTIVE_CONTACTS": "Keine aktiven Kontakte gefunden",
@@ -18,7 +18,7 @@
     "CREDITS_TITLE": "Credits",
 
     "CREDITS_PEOPLE_LABEL": "Personen die mich während der Entwicklung sehr unterstützt und inspiriert haben",
-    "CREDITS_ASSETS_LABEL": "Alle eingesetzten Grafiken stammen von",
+    "CREDITS_ASSETS_LABEL": "Alle Illustrationen stammen von",
 
     "ONBOARDING_PAGE_1_TITLE": "Deine Hilfe ist gefragt!",
     "ONBOARDING_PAGE_1_TEXT": "Damit das aktuell kursierende Coronavirus so schnell wie möglich besiegt werden kann sind wir alle dazu angehalten genügend Abstand zu anderen Menschen zu halten. NOVID-19 möchte dich dabei unterstützen.",
@@ -42,7 +42,7 @@
     "PRIVACY_TEXT_ROW_1": "Nicht nur unsere Gesundheit muss geschützt werden, sondern auch deine Daten. Deshalb verlassen die, von der App, gesammelten Daten niemals dein Smartphone.",
 
     "PRIVACY_HEADING_ROW_2": "Deine Daten werden nicht geteilt",
-    "PRIVACY_TEXT_ROW_2": "Die meisten Apps blenden Werbung ein oder verkaufen deine Daten an Werbetreibende, NOVID-19 ist ein Hobbyprojekt und wird in keinster Weise durch Werbung, verkauf von Daten oder sonstigem finanziert.",
+    "PRIVACY_TEXT_ROW_2": "Die meisten Apps blenden Werbung ein oder verkaufen deine Daten an Werbetreibende, NOVID-19 ist ein Hobbyprojekt und wird in keinster Weise durch Werbung, Verkauf von Daten oder sonstigem finanziert.",
 
     "PRIVACY_HEADING_ROW_3": "Keine externen Tracking-Tools",
     "PRIVACY_TEXT_ROW_3": "Viele Apps verwenden sogenannte Tracking-Tools um ihren Service zu verbessern. NOVID-19 benutzt keine Tools um deine Daten zu Analysieren, deshalb sind wir auf deine Mithilfe angewiesen, wenn Du einen Bug findest dann melde ihn bitte."
