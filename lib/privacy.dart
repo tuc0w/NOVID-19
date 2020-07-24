@@ -47,7 +47,7 @@ class PrivacyScreen extends StatelessWidget {
                                                     child: Column(
                                                         children: <Widget>[
                                                             SizedBox(
-                                                                height: 69.0
+                                                                height: 25.0
                                                             ),
                                                             Align(
                                                                 child: Image.asset('assets/privacy/security.png', width: 200.0),
@@ -191,6 +191,9 @@ class PrivacyScreen extends StatelessWidget {
                                                                         ),
                                                                     )
                                                                 ],
+                                                            ),
+                                                            SizedBox(
+                                                                height: 50.0
                                                             ),
                                                         ],
                                                     ),
