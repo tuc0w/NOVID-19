@@ -84,7 +84,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     ),
                     PageViewModel(
                         title: "Updates",
-                        body: "In den kommenden Wochen wird es einige Updates geben, ein großes Feature wird dabei die Kalenderansicht der Kontakte und das erkennen von Autofahrten sein.",
+                        body: "In den kommenden Wochen wird es einige Updates geben, ein großes Feature wird dabei eine Kalenderansicht der Kontakte sein.",
                         image: _buildImage('stay-positive'),
                         decoration: pageDecoration,
                     ),
