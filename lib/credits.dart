@@ -49,6 +49,13 @@ class CreditsScreen extends StatelessWidget {
                                                             SizedBox(
                                                                 height: 25.0
                                                             ),
+                                                            Align(
+                                                                child: Image.asset('assets/credits/winners.png', width: 300.0),
+                                                                alignment: Alignment.bottomCenter,
+                                                            ),
+                                                            SizedBox(
+                                                                height: 25.0
+                                                            ),
                                                             Row(
                                                                 crossAxisAlignment: CrossAxisAlignment.center,
                                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
