@@ -65,6 +65,7 @@ flutter:
   assets:
     - assets/icon/
     - assets/onboarding/
+    - assets/privacy/
     - assets/splash/
     - i18n/
 

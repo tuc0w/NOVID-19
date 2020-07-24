@@ -32,6 +32,7 @@ import 'package:NOVID_19/service/exposure_notification.dart';
 
 // screens
 import 'package:NOVID_19/credits.dart';
+import 'package:NOVID_19/privacy.dart';
 
 part 'package:NOVID_19/isolates/database.dart';
 part 'package:NOVID_19/part/novid19.dart';

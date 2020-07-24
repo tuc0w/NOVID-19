@@ -60,7 +60,7 @@ class CreditsScreen extends StatelessWidget {
                                                                                 color: Colors.white,
                                                                                 fontSize: 18.0,
                                                                                 fontWeight: FontWeight.w400,
-                                                                                letterSpacing: 1.2,
+                                                                                letterSpacing: 1.1,
                                                                             ),
                                                                             textAlign: TextAlign.center,
                                                                         ),
@@ -97,7 +97,7 @@ class CreditsScreen extends StatelessWidget {
                                                                                 color: Colors.white,
                                                                                 fontSize: 18.0,
                                                                                 fontWeight: FontWeight.w400,
-                                                                                letterSpacing: 1.2,
+                                                                                letterSpacing: 1.1,
                                                                             ),
                                                                             textAlign: TextAlign.center,
                                                                         ),
@@ -111,6 +111,14 @@ class CreditsScreen extends StatelessWidget {
                                                                 color: Colors.white,
                                                                 text: 'Freepik',
                                                                 url: 'https://freepik.com',
+                                                            ),
+                                                            SizedBox(
+                                                                height: 35.0
+                                                            ),
+                                                            CreditsRow(
+                                                                color: Colors.white,
+                                                                text: 'Stories by Freepik',
+                                                                url: 'https://stories.freepik.com',
                                                             ),
                                                         ],
                                                     ),
