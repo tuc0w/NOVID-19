@@ -48,12 +48,15 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
     }
 
     Future<void> _initDatabaseStreams() async {
-        _activeContactsSubscription = Stream
-            .periodic(_activityUpdateDuration)
+        _activeContactsSubscription = Rx
+            .concat<Null>([
+                Stream.value(null),
+                Stream.periodic(_activityUpdateDuration),
+            ])
             .switchMap((_) {
                 return _database.watchAllContacts(
                     from: getTimeOneHourAgo(),
-                    to: DateTime.now()
+                    to: getCurrentDateTime()
                 );
             })
             .listen((contactsWithNotifications) {
@@ -62,8 +65,12 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                 });
             });
         
-        _uniqueContactsSubscription = Stream
-            .periodic(_infoUpdateDuration)
+
+        _uniqueContactsSubscription = Rx
+            .concat<Null>([
+                Stream.value(null),
+                Stream.periodic(_infoUpdateDuration),
+            ])
             .switchMap((_) {
                 return _database.watchUniqueContacts(
                     from: getLastMidnight(),
@@ -76,8 +83,12 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                 });
             });
         
-        _lowestDistanceSubscription = Stream
-            .periodic(_infoUpdateDuration)
+        
+        _lowestDistanceSubscription = Rx
+            .concat<Null>([
+                Stream.value(null),
+                Stream.periodic(_infoUpdateDuration),
+            ])
             .switchMap((_) {
                 return _database.watchLowestExposureDistance(
                     from: getLastMidnight(),
@@ -90,8 +101,12 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                 });
             });
         
-        _longestContactsSubscription = Stream
-            .periodic(_infoUpdateDuration)
+
+        _longestContactsSubscription = Rx
+            .concat<Null>([
+                Stream.value(null),
+                Stream.periodic(_infoUpdateDuration),
+            ])
             .switchMap((_) {
                 return _database.watchAllContacts(
                     from: getLastMidnight(),
