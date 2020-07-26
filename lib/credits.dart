@@ -95,7 +95,7 @@ class CreditsScreen extends StatelessWidget {
                                                             ),
                                                             Row(
                                                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                mainAxisAlignment: MainAxisAlignment.center,
                                                                 children: <Widget>[
                                                                     Flexible(
                                                                         child: Text(
