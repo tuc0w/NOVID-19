@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // ui
@@ -40,7 +41,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     Widget build(BuildContext context) {
         const bodyStyle = TextStyle(
             color: Colors.white,
-            fontSize: 19.0
+            fontSize: 18.0,
+            height: 1.3
         );
         const pageDecoration = const PageDecoration(
             titleTextStyle: TextStyle(
@@ -66,37 +68,67 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     ),
                     PageViewModel(
                         title: "Deine täglichen Kontakte",
-                        body: "Für einen besseren Überblick, trackt die App alle Kontakte mit Personen die die Corona-App verwenden und zeigt sie dir an.\n\nDamit deine Kontakte getracked werden können, lass die App bitte im Hintergrund laufen und beende sie nicht.",
+                        body: "NOVID-19 trackt anonymisiert alle Kontakte mit Personen, die die Corona-Warn-App verwenden.\n\nStarte die App wenn du unterwegs bist. So kannst du z.B. beim Einkaufen, auf der Arbeit oder an anderen Orten besser nachvollziehen, ob du kritische Kontaktpunkte hast.",
                         image: _buildImage('daily_contacts'),
                         decoration: pageDecoration,
                     ),
                     PageViewModel(
                         title: "Erkenne lange Kontakte",
-                        body: "Um dich selbst besser schützen zu können, solltest du längere Kontakte vermeiden. NOVID-19 hilft dir dabei die Länge der Kontakte in deiner Nähe zu erkennen.",
+                        body: "Um dich selbst besser schützen zu können, solltest du längere Kontakte vermeiden:\n\nNOVID-19 trackt Kontakte innerhalb von 2 Metern. Anhaltende Kontakte werden nach 5 Minuten orange und ab 10 Minuten rot dargestellt.",
                         image: _buildImage('nearest_contacts'),
                         decoration: pageDecoration,
                     ),
                     PageViewModel(
                         title: "Das braucht die App",
-                        body: "Um Kontakte verfolgen zu können muss NOVID-19 auf deine Standortdaten zugreifen, sie sind nötig um über Bluetooth nach anderen Geräten zu suchen, die App wird dabei niemals auf dein GPS zugreifen!",
+                        body: "Um Kontakte verfolgen zu können, muss NOVID-19 auf deine Standortdaten zugreifen. Diese sind nötig um über Bluetooth nach anderen Geräten zu suchen.\n\nDie App wird dabei niemals auf dein GPS zugreifen!",
                         image: _buildImage('data'),
                         decoration: pageDecoration,
                     ),
                     PageViewModel(
-                        title: "Updates",
-                        body: "In den kommenden Wochen wird es einige Updates geben, ein großes Feature wird dabei eine Kalenderansicht der Kontakte sein.",
+                        title: "Los geht's!",
+                        bodyWidget: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                                Text(
+                                    "App an!",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.w400,
+                                        height: 1.3
+                                    ),
+                                ),
+                                Text(
+                                    "Abstand halten!",
+                                        style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.w400,
+                                        height: 1.3
+                                    ),
+                                ),
+                                Text("Gesund bleiben!\n",
+                                        style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.w400,
+                                        height: 1.3
+                                    ),
+                                ),
+                                FaIcon(FontAwesomeIcons.smile),
+                            ],
+                        ),
                         image: _buildImage('stay-positive'),
                         decoration: pageDecoration,
                     ),
                 ],
                 onDone: () => _onIntroEnd(context),
-                //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
                 showSkipButton: false,
                 skipFlex: 0,
                 nextFlex: 0,
                 skip: const Text('Skip', style: TextStyle(color: Colors.white)),
                 next: const Icon(Icons.arrow_forward, color: Colors.white,),
-                done: const Text('Done', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                done: const Text('Fertig', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
                 dotsDecorator: const DotsDecorator(
                     size: Size(10.0, 10.0),
                     color: DarkColors.brand,
