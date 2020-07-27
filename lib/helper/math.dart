@@ -14,10 +14,15 @@ const num broadcastingPower = 3.9; // the broadcasting power is around 2-4 dBm
 /// ```
 /// Returns the distance in meters.
 double calculateDistance(int rssi) {
-    return pow(10, ((measuredPower - (rssi))/(10 * broadcastingPower)));
+    num result = 0.00;
+    if (rssi != null) {
+        result = pow(10, ((measuredPower - (rssi))/(10 * broadcastingPower)));
+    }
+
+    return result;
 }
 
 double roundDouble(double value, int places){ 
     double mod = pow(10.0, places); 
-    return ((value * mod).round().toDouble() / mod); 
+    return ((value * mod).round()?.toDouble() ?? 0.00 / mod); 
 }

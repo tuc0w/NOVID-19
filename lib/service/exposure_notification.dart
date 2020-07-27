@@ -83,7 +83,7 @@ class ExposureNotificationDiscovery {
                     exposureDevices.add(deviceId);
                     _database.addDiscoveredContact(identifier: deviceId);
                 } else if (exposureDevices.contains(deviceId)) {
-                    distance = roundDouble(distance, 2);
+                    distance = roundDouble(distance ?? 0.00, 2);
                     if (distance <= _distanceThreshold) {
                         _database.addExposureNotification(
                             identifier: deviceId,

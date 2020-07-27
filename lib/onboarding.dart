@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 // ui
 import 'package:NOVID_19/theme/colors/dark_colors.dart';
-// novid
-import 'package:NOVID_19/helper/localization.dart';
 
+// novid
 import 'package:NOVID_19/novid19.dart';
 
 class OnBoardingScreen extends StatefulWidget {
