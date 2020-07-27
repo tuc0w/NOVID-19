@@ -1,4 +1,4 @@
-package com.example.novid_19
+package com.andreasbehrend.novid_19
 
 import io.flutter.embedding.android.FlutterActivity
 
