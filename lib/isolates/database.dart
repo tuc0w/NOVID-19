@@ -1,5 +1,5 @@
 
-part of '../main.dart';
+part of '../novid19.dart';
 
 Future<MoorIsolate> _createMoorIsolate() async {
     // this method is called from the main isolate. Since we can't use
@@ -27,7 +27,7 @@ void _startBackground(_IsolateStartRequest request) {
     // background isolate. If we used MoorIsolate.spawn, a third isolate would be
     // started which is not what we want!
     final moorIsolate = MoorIsolate.inCurrent(
-        () => moor.DatabaseConnection.fromExecutor(executor),
+        () => Room.DatabaseConnection.fromExecutor(executor),
     );
     // inform the starting isolate about this, so that it can call .connect()
     request.sendMoorIsolate.send(moorIsolate);

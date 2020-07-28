@@ -1,42 +1,9 @@
-import 'dart:io';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as p;
 import 'package:rxdart/rxdart.dart';
 
 part 'database.g.dart';
-
-class ExposureNotifications extends Table {
-    IntColumn get id => integer().autoIncrement()();
-    TextColumn get identifier => text().withLength(max: 17)();
-    IntColumn get rssi => integer()();
-    DateTimeColumn get date => dateTime().nullable()();
-}
-
-class DiscoveredContacts extends Table {
-    IntColumn get id => integer().autoIncrement()();
-    TextColumn get identifier => text().withLength(max: 17)();
-    DateTimeColumn get date => dateTime().nullable()();
-
-    @override
-    List<String> get customConstraints => [
-        'UNIQUE (id, identifier)'
-    ];
-}
-
-@DataClassName('DiscoveredContactEntry')
-class DiscoveredContactEntries extends Table {
-    IntColumn get discoveredContact => integer()();
-    IntColumn get exposureNotification => integer()();
-}
-
-class ContactWithNotifications {
-    final DiscoveredContact contact;
-    final List<ExposureNotification> notifications;
-
-    ContactWithNotifications(this.contact, this.notifications);
-}
+part 'tables.dart';
 
 @UseMoor(
     tables: [
@@ -59,16 +26,68 @@ class Database extends _$Database {
     Stream<List<ExposureNotification>> watchAllExposureNotifications() => select(exposureNotifications).watch();
     Future insertExposureNotification(ExposureNotification exposureNotification) => into(exposureNotifications).insert(exposureNotification);
 
-    Future addExposureNotification({String identifier, int rssi}) async {
+    Future<void> addExposureNotification({String identifier, int rssi, DateTime from, DateTime to}) async {
         int contactId;
-        final DateTime date = new DateTime.now();
-        final ExposureNotification exposureNotification = new ExposureNotification(
-            identifier: identifier,
-            rssi: rssi,
-            date: date
-        );
+        final discoveredContact = await (
+            select(discoveredContacts)
+                ..where(
+                    (tbl) =>
+                        tbl.identifier.equals(identifier) &
+                        tbl.date.isBetweenValues(from, to)
+                )
+                ..orderBy([
+                    (tbl) => OrderingTerm(
+                        expression: tbl.date,
+                        mode: OrderingMode.desc
+                    )
+                ])
+                ..limit(1) // this needs to be fixed, there cannot be more than one entry
+            ).getSingle();
 
-        final exposureId = await into(exposureNotifications).insert(exposureNotification);
+        if (discoveredContact != null) {
+            contactId = discoveredContact.id;
+            final DateTime date = new DateTime.now();
+            final ExposureNotification exposureNotification = new ExposureNotification(
+                identifier: identifier,
+                rssi: rssi,
+                date: date
+            );
+            final exposureId = await into(exposureNotifications).insert(exposureNotification);
+            await addDiscoveredContactEntry(discoveredContactId: contactId, exposureNotificationId: exposureId);
+        }
+    }
+
+    Stream<List<DiscoveredContact>> watchUniqueContacts({DateTime from, DateTime to}) {
+        return (select(discoveredContacts)
+            ..where(
+                (contact) => 
+                    contact.date.isBetweenValues(from, to)
+            )).watch();
+    }
+
+    Stream<ExposureNotification> watchLowestExposureDistance({DateTime from, DateTime to}) {
+        return (select(exposureNotifications)
+            ..orderBy([
+                (tbl) => OrderingTerm(
+                    expression: tbl.rssi,
+                    mode: OrderingMode.desc
+                )
+            ])
+            ..where(
+                (notification) => 
+                    notification.date.isBetweenValues(from, to)
+            )
+            ..limit(1)
+        ).watchSingle();
+    }
+
+    Future<List<DiscoveredContact>> getAllDiscoveredContacts() => select(discoveredContacts).get();
+    Stream<List<DiscoveredContact>> watchAllDiscoveredContacts() => select(discoveredContacts).watch();
+    Future insertDiscoveredContact(DiscoveredContact discoveredContact) => into(discoveredContacts).insert(discoveredContact);
+
+    Future<int> addDiscoveredContact({String identifier, DateTime date}) async {
+        final _date = date ?? new DateTime.now();
+        int contactId;
 
         final discoveredContact = await (
             select(discoveredContacts)
@@ -83,64 +102,15 @@ class Database extends _$Database {
             ).getSingle();
 
         if (discoveredContact == null) {
-            contactId = await addDiscoveredContact(identifier: identifier);
+            final DiscoveredContact discoveredContact = new DiscoveredContact(
+                identifier: identifier,
+                date: _date
+            );
+            contactId = await into(discoveredContacts).insert(discoveredContact, mode: InsertMode.insertOrIgnore);
         } else {
             contactId = discoveredContact.id;
         }
-
-        await addDiscoveredContactEntry(discoveredContactId: contactId, exposureNotificationId: exposureId);
-    }
-
-    Future<List> getUniqueExposureNotifications({DateTime date}) async {
-        final query = selectOnly(exposureNotifications)
-            ..addColumns([exposureNotifications.identifier])
-            ..groupBy([exposureNotifications.identifier]);
-        
-        if (date != null) {
-            query..where(
-                exposureNotifications.date.year.equals(date.year) &
-                exposureNotifications.date.month.equals(date.month) &
-                exposureNotifications.date.day.equals(date.day)
-            );
-        }
-        
-        return await query.get();
-    }
-
-    Future<int> getLowestExposureDistance({DateTime date}) async {
-        final query = select(exposureNotifications)
-            ..orderBy([
-                (tbl) => OrderingTerm(
-                    expression: tbl.rssi,
-                    mode: OrderingMode.desc
-                )
-            ])
-            ..limit(1);
-
-        if (date != null) {
-            query..where((a) => 
-                exposureNotifications.date.year.equals(date.year) &
-                exposureNotifications.date.month.equals(date.month) &
-                exposureNotifications.date.day.equals(date.day)
-            );
-        }
-
-        final result = await query.getSingle();
-
-        return result?.rssi ?? 0;
-    }
-
-    Future<List<DiscoveredContact>> getAllDiscoveredContacts() => select(discoveredContacts).get();
-    Stream<List<DiscoveredContact>> watchAllDiscoveredContacts() => select(discoveredContacts).watch();
-    Future insertDiscoveredContact(DiscoveredContact discoveredContact) => into(discoveredContacts).insert(discoveredContact);
-
-    Future<int> addDiscoveredContact({String identifier, DateTime date}) async {
-        final _date = date ?? new DateTime.now();
-        final DiscoveredContact discoveredContact = new DiscoveredContact(
-            identifier: identifier,
-            date: _date
-        );
-        return await into(discoveredContacts).insert(discoveredContact, mode: InsertMode.insertOrIgnore);
+        return contactId;
     }
 
     Future addDiscoveredContactEntry({int discoveredContactId, int exposureNotificationId}) async {
@@ -156,7 +126,13 @@ class Database extends _$Database {
             ..where(
                 (contact) => 
                     contact.date.isBetweenValues(from, to)
-            )).watch();
+            )..orderBy([
+                (contact) => OrderingTerm(
+                    expression: contact.date,
+                    mode: OrderingMode.desc
+                )
+            ])
+            ).watch();
 
         return discoveredContactsStream.switchMap((contacts) {
             final idToContact = {for (var contact in contacts) contact.id: contact};
