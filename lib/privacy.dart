@@ -3,7 +3,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:NOVID_19/helper/localization.dart';
 import 'package:NOVID_19/theme/colors/dark_colors.dart';
-import 'package:NOVID_19/widgets/subheading.dart';
 
 class PrivacyScreen extends StatelessWidget {
     static String tag = 'privacy-screen';
