@@ -2,9 +2,11 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
+import 'package:battery_optimization/battery_optimization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // database
 import 'package:moor/isolate.dart';
 import 'package:moor/moor.dart' as Room;
@@ -54,7 +56,7 @@ class Novid19Screen extends StatelessWidget {
                     GlobalWidgetsLocalizations.delegate,
                 ],
                 debugShowCheckedModeBanner: false,
-                title: 'NOVID-19',
+                title: 'CoTrack',
                 theme: ThemeData(
                     brightness: Brightness.dark,
                     visualDensity: VisualDensity.adaptivePlatformDensity,

@@ -61,25 +61,25 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 pages: [
                     PageViewModel(
                         title: "Deine Hilfe ist gefragt!",
-                        body: "Damit das aktuell kursierende Coronavirus so schnell wie möglich besiegt werden kann sind wir alle dazu angehalten genügend Abstand zu anderen Menschen zu halten. NOVID-19 möchte dich dabei unterstützen.",
+                        body: "Damit das aktuell kursierende Coronavirus so schnell wie möglich besiegt werden kann sind wir alle dazu angehalten genügend Abstand zu anderen Menschen zu halten. CoTrack möchte dich dabei unterstützen.",
                         image: _buildImage('fighting-coronavirus'),
                         decoration: pageDecoration,
                     ),
                     PageViewModel(
                         title: "Deine täglichen Kontakte",
-                        body: "NOVID-19 trackt anonymisiert alle Kontakte mit Personen, die die Corona-Warn-App verwenden.\n\nStarte die App wenn du unterwegs bist. So kannst du z.B. beim Einkaufen, auf der Arbeit oder an anderen Orten besser nachvollziehen, ob du kritische Kontaktpunkte hast.",
+                        body: "CoTrack trackt anonymisiert alle Kontakte mit Personen, die die Corona-Warn-App verwenden.\n\nStarte die App wenn du unterwegs bist. So kannst du z.B. beim Einkaufen, auf der Arbeit oder an anderen Orten besser nachvollziehen, ob du kritische Kontaktpunkte hast.",
                         image: _buildImage('daily_contacts'),
                         decoration: pageDecoration,
                     ),
                     PageViewModel(
                         title: "Erkenne lange Kontakte",
-                        body: "Um dich selbst besser schützen zu können, solltest du längere Kontakte vermeiden:\n\nNOVID-19 trackt Kontakte innerhalb von 2 Metern. Anhaltende Kontakte werden nach 5 Minuten orange und ab 10 Minuten rot dargestellt.",
+                        body: "Um dich selbst besser schützen zu können, solltest du längere Kontakte vermeiden:\n\nCoTrack trackt Kontakte innerhalb von 2 Metern. Anhaltende Kontakte werden nach 5 Minuten orange und ab 10 Minuten rot dargestellt.",
                         image: _buildImage('nearest_contacts'),
                         decoration: pageDecoration,
                     ),
                     PageViewModel(
                         title: "Das braucht die App",
-                        body: "Um Kontakte verfolgen zu können, muss NOVID-19 auf deine Standortdaten zugreifen. Diese sind nötig um über Bluetooth nach anderen Geräten zu suchen.\n\nDie App wird dabei niemals auf dein GPS zugreifen!",
+                        body: "Um Kontakte verfolgen zu können, muss CoTrack auf deine Standortdaten zugreifen. Diese sind nötig um über Bluetooth nach anderen Geräten zu suchen.\n\nDie App wird dabei niemals auf dein GPS zugreifen!",
                         image: _buildImage('data'),
                         decoration: pageDecoration,
                     ),

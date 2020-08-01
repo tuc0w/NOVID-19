@@ -18,6 +18,7 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
     double _lowestDistance = 0.00;
     int _longestContacts = 0;
     Widget _recentActivity;
+    bool _dontAskAgainForBatteryPermissions = false;
 
     // thresholds
     double _distanceThreshold = 2.0;
@@ -38,6 +39,7 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
         super.initState();
         _initDatabseIsolate();
         _initNotificationDiscovery();
+        _checkBatteryPermissions();
     }
 
     Future<void> _initDatabseIsolate() async {
@@ -160,6 +162,82 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                 scannerInitialized = false;
             }
         });
+    }
+
+    void _onBatteryDialogValueChange(bool state) async {
+        await SharedPreferences.getInstance().then((prefs) {
+            prefs.setBool('battery_dont_ask', state);
+        });
+    }
+
+    void _displayBatteryDialog() async {
+        return showDialog(
+            context: context,
+            builder: (_) => new AlertDialog(
+                title: Text(AppLocalizations.of(context).translate('BATTERY_DIALOG_TITLE')),
+                content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                        Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                                Flexible(
+                                    child: Text(
+                                        AppLocalizations.of(context).translate('BATTERY_DIALOG_QUESTION'),
+                                        textAlign: TextAlign.center,
+                                    ),
+                                )
+                            ],
+                        ),
+                        CheckboxListTile(
+                            title: Text(AppLocalizations.of(context).translate('BATTERY_DIALOG_CHECKBOX')),
+                            value: _dontAskAgainForBatteryPermissions,
+                            onChanged: (bool value) {
+                                setState(() {
+                                    _dontAskAgainForBatteryPermissions = value;
+                                    _onBatteryDialogValueChange(value);
+                                });
+                            },
+                        ),
+                    ],
+                ),
+                actions: <Widget>[
+                    FlatButton(
+                        child: new Text(
+                            AppLocalizations.of(context).translate('BATTERY_DIALOG_CANCEL'),
+                            textAlign: TextAlign.center,
+                        ),
+                        onPressed: () {
+                            Navigator.of(context).pop();
+                        },
+                    ),
+                    FlatButton(
+                        child: new Text(
+                            AppLocalizations.of(context).translate('BATTERY_DIALOG_OK'),
+                            textAlign: TextAlign.center,
+                        ),
+                        onPressed: () {
+                            BatteryOptimization.openBatteryOptimizationSettings();
+                        },
+                    )
+                ],
+            )
+        );
+    }
+
+    Future<void> _checkBatteryPermissions() async {
+        await SharedPreferences.getInstance().then((prefs) {
+            _dontAskAgainForBatteryPermissions = prefs.getBool('battery_dont_ask') ?? false;
+        });
+
+        if (Platform.isAndroid && !_dontAskAgainForBatteryPermissions) {
+            BatteryOptimization.isIgnoringBatteryOptimizations().then((isIgnoringBatteryOptimization) {
+                if (!isIgnoringBatteryOptimization) {
+                    _displayBatteryDialog();
+                }
+            });
+        }
     }
 
     @override

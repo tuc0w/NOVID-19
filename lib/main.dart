@@ -40,7 +40,7 @@ class _Novid19AppState extends State<Novid19App> {
         );
 
         return MaterialApp(
-            title: 'NOVID-19',
+            title: 'CoTrack',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
                 brightness: Brightness.dark,

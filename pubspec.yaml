@@ -1,5 +1,5 @@
 name: NOVID_19
-description: Die Anti-Anti-Corona-App.
+description: Die Ergänzung zur Corona-Warn-App.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.1.0+1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -28,6 +28,7 @@ dependencies:
     sdk: flutter
   
   animations: ^1.1.1
+  battery_optimization: ^0.1.0
   fab_circular_menu: ^1.0.0
   flutter_ble_lib: ^2.2.5
   flutter_launcher_icons: ^0.7.5

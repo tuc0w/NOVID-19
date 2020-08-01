@@ -57,9 +57,13 @@ class ExposureNotificationDiscovery {
     Future<void> _checkPermissions() async {
         if (Platform.isAndroid) {
             var permissionStatus = await PermissionHandler()
-                .requestPermissions([PermissionGroup.location]);
+                .requestPermissions([
+                    PermissionGroup.location
+                ]);
 
-            _locationPermissionStatus = permissionStatus[PermissionGroup.location];
+            _locationPermissionStatus = permissionStatus[
+                PermissionGroup.location
+            ];
 
             if (_locationPermissionStatus != PermissionStatus.granted) {
                 return Future.error(Exception("Location permission not granted"));
