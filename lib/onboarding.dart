@@ -4,10 +4,10 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ui
-import 'package:NOVID_19/theme/colors/dark_colors.dart';
+import 'package:CoTrack/theme/colors/dark_colors.dart';
 
 // novid
-import 'package:NOVID_19/novid19.dart';
+import 'package:CoTrack/cotrack.dart';
 
 class OnBoardingScreen extends StatefulWidget {
     static String tag = 'onboarding-screen';

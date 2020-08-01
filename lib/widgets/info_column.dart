@@ -1,4 +1,4 @@
-import 'package:NOVID_19/theme/colors/dark_colors.dart';
+import 'package:CoTrack/theme/colors/dark_colors.dart';
 import 'package:flutter/material.dart';
 
 class InfoColumn extends StatelessWidget {

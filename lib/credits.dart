@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'package:NOVID_19/helper/localization.dart';
-import 'package:NOVID_19/theme/colors/dark_colors.dart';
-import 'package:NOVID_19/widgets/credits_row.dart';
+import 'package:CoTrack/helper/localization.dart';
+import 'package:CoTrack/theme/colors/dark_colors.dart';
+import 'package:CoTrack/widgets/credits_row.dart';
 
 class CreditsScreen extends StatelessWidget {
     static String tag = 'credits-screen';

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:NOVID_19/main.dart';
+import 'package:CoTrack/main.dart';
 
 void main() {
     testWidgets('Novid test', (WidgetTester tester) async {

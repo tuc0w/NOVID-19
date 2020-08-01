@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // novid
-import 'package:NOVID_19/onboarding.dart';
-import 'package:NOVID_19/novid19.dart';
+import 'package:CoTrack/onboarding.dart';
+import 'package:CoTrack/cotrack.dart';
 
 bool onboarded = false;
 

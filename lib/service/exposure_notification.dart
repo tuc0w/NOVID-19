@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:NOVID_19/helper/time.dart';
+import 'package:CoTrack/helper/time.dart';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:NOVID_19/data/database.dart';
-import 'package:NOVID_19/helper/math.dart';
+import 'package:CoTrack/data/database.dart';
+import 'package:CoTrack/helper/math.dart';
 
 class ExposureNotificationDiscovery {
     BleManager _bleManager = new BleManager();

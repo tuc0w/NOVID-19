@@ -1,11 +1,11 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:NOVID_19/data/database.dart';
-import 'package:NOVID_19/helper/localization.dart';
-import 'package:NOVID_19/helper/math.dart';
-import 'package:NOVID_19/helper/time.dart';
-import 'package:NOVID_19/theme/colors/dark_colors.dart';
-import 'package:NOVID_19/widgets/activity_card.dart';
+import 'package:CoTrack/data/database.dart';
+import 'package:CoTrack/helper/localization.dart';
+import 'package:CoTrack/helper/math.dart';
+import 'package:CoTrack/helper/time.dart';
+import 'package:CoTrack/theme/colors/dark_colors.dart';
+import 'package:CoTrack/widgets/activity_card.dart';
 
 class RenderActivity extends StatelessWidget {
     final BuildContext _context;

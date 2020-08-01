@@ -1,4 +1,4 @@
-part of '../novid19.dart';
+part of '../cotrack.dart';
 
 class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
     Database _database;
@@ -203,7 +203,7 @@ class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                 children: <Widget>[
                                                     LogoColumn(
-                                                        image: "assets/icon/icon.png",
+                                                        image: "assets/icon/CoTrack_Icon.png",
                                                         imageBackgroundColor: Colors.transparent,
                                                         title: AppLocalizations.of(context).translate('HEADER_TITLE'),
                                                         subtitle: AppLocalizations.of(context).translate('HEADER_SUBTITLE')
