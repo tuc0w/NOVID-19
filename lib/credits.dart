@@ -11,7 +11,7 @@ class CreditsScreen extends StatelessWidget {
     @override
     Widget build(BuildContext context) {
         return MaterialApp(
-            title: 'NOVID-19',
+            title: 'CoTrack',
             theme: ThemeData(
                 primaryColor: DarkColors.secondary,
                 scaffoldBackgroundColor: DarkColors.primary
