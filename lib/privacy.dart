@@ -3,7 +3,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:NOVID_19/helper/localization.dart';
 import 'package:NOVID_19/theme/colors/dark_colors.dart';
-import 'package:NOVID_19/widgets/subheading.dart';
 
 class PrivacyScreen extends StatelessWidget {
     static String tag = 'privacy-screen';
@@ -11,7 +10,7 @@ class PrivacyScreen extends StatelessWidget {
     @override
     Widget build(BuildContext context) {
         return MaterialApp(
-            title: 'NOVID-19',
+            title: 'CoTrack',
             theme: ThemeData(
                 primaryColor: DarkColors.secondary,
                 scaffoldBackgroundColor: DarkColors.primary

@@ -46,10 +46,10 @@ class RenderActivity extends StatelessWidget {
                 Duration difference = lastNotificationDate.difference(firstNotificationDate);
 
                 if (difference.inSeconds >= 180) {
-                    final rssiToContact = {for (var notification in element.notifications) notification.id: notification?.rssi};
+                    final rssiToContact = {for (var notification in element.notifications) notification.id: notification.rssi};
                     final rssis = rssiToContact.values;
                     final int averageRssi = (rssis.reduce((a, b) => a + b) / rssis.length).round();
-                    final double averageDistance = roundDouble(calculateDistance(averageRssi) ?? 0.00, 2);
+                    final double averageDistance = roundDouble(calculateDistance(averageRssi), 2);
                     final double percentIndicator = min((1/_maxPercentInSeconds) * difference.inSeconds, 1.0);
                     Color progressIndicatorColor = DarkColors.success;
 
