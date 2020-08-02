@@ -23,7 +23,7 @@ import 'package:CoTrack/widgets/logo_column.dart';
 import 'package:CoTrack/widgets/subheading.dart';
 import 'package:CoTrack/widgets/top_container.dart';
 import 'package:xlive_switch/xlive_switch.dart';
-// novid
+// CoTrack
 import 'package:CoTrack/data/database.dart';
 import 'package:CoTrack/helper/localization.dart';
 import 'package:CoTrack/helper/time.dart';
@@ -37,8 +37,8 @@ import 'package:CoTrack/privacy.dart';
 part 'package:CoTrack/isolates/database.dart';
 part 'package:CoTrack/part/cotrack.dart';
 
-class Novid19Screen extends StatelessWidget {
-    static String tag = 'novid19-screen';
+class CoTrackScreen extends StatelessWidget {
+    static String tag = 'cotrack-screen';
 
     @override
     Widget build(BuildContext context) {
@@ -59,13 +59,13 @@ class Novid19Screen extends StatelessWidget {
                     brightness: Brightness.dark,
                     visualDensity: VisualDensity.adaptivePlatformDensity,
                 ),
-                home: Novid(),
+                home: CoTrack(),
             )
         );
     }
 }
 
-class Novid extends StatefulWidget {
+class CoTrack extends StatefulWidget {
     @override
-    _NovidState createState() => _NovidState();
+    _CoTrackState createState() => _CoTrackState();
 }

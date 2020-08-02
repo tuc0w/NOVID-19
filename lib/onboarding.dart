@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 // ui
 import 'package:CoTrack/theme/colors/dark_colors.dart';
 
-// novid
+// CoTrack
 import 'package:CoTrack/cotrack.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -25,7 +25,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         });
 
         Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => Novid19Screen())
+            MaterialPageRoute(builder: (_) => CoTrackScreen())
         );
     }
 

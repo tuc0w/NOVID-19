@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// novid
+// CoTrack
 import 'package:CoTrack/onboarding.dart';
 import 'package:CoTrack/cotrack.dart';
 
@@ -14,17 +14,17 @@ void main() async {
         onboarded = prefs.getBool('onboarded') ?? false;
     });
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-        .then((_) => runApp(Novid19App()));
+        .then((_) => runApp(CoTrackApp()));
 }
 
-class Novid19App extends StatefulWidget {
+class CoTrackApp extends StatefulWidget {
     @override
-    _Novid19AppState createState() => _Novid19AppState();
+    _CoTrackAppState createState() => _CoTrackAppState();
 }
 
-class _Novid19AppState extends State<Novid19App> {
+class _CoTrackAppState extends State<CoTrackApp> {
     final routes = <String, WidgetBuilder>{
-        Novid19Screen.tag: (context) => Novid19Screen(),
+        CoTrackScreen.tag: (context) => CoTrackScreen(),
         OnBoardingScreen.tag: (context) => OnBoardingScreen(),
     };
 
@@ -49,7 +49,7 @@ class _Novid19AppState extends State<Novid19App> {
                 if (!onboarded) {
                     return OnBoardingScreen();
                 } else {
-                    return Novid19Screen();
+                    return CoTrackScreen();
                 }
             }),
             routes: routes,

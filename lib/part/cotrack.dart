@@ -1,6 +1,6 @@
 part of '../cotrack.dart';
 
-class _NovidState extends State<Novid> with SingleTickerProviderStateMixin {
+class _CoTrackState extends State<CoTrack> with SingleTickerProviderStateMixin {
     Database _database;
     ExposureNotificationDiscovery _notificationDiscovery = new ExposureNotificationDiscovery();
     MoorIsolate _databaseIsolate;

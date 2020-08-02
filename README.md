@@ -1,4 +1,4 @@
-# NOVID-19
+# CoTrack
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/tuc0w/NOVID-19)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
