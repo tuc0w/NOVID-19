@@ -61,13 +61,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 pages: [
                     PageViewModel(
                         title: "Deine Hilfe ist gefragt!",
-                        body: "Damit das aktuell kursierende Coronavirus so schnell wie möglich besiegt werden kann sind wir alle dazu angehalten genügend Abstand zu anderen Menschen zu halten. CoTrack möchte dich dabei unterstützen.",
+                        body: "Damit sich Viren nicht so schnell ausbreiten können sind wir alle dazu angehalten genügend Abstand zu anderen Menschen zu halten. CoTrack möchte dich dabei unterstützen.",
                         image: _buildImage('fighting-coronavirus'),
                         decoration: pageDecoration,
                     ),
                     PageViewModel(
                         title: "Deine täglichen Kontakte",
-                        body: "CoTrack trackt anonymisiert alle Kontakte mit Personen, die die Corona-Warn-App verwenden.\n\nStarte die App wenn du unterwegs bist. So kannst du z.B. beim Einkaufen, auf der Arbeit oder an anderen Orten besser nachvollziehen, ob du kritische Kontaktpunkte hast.",
+                        body: "CoTrack trackt anonymisiert alle Kontakte mit Personen, die eine Warn-App verwenden.\n\nStarte die App wenn du unterwegs bist. So kannst du z.B. beim Einkaufen, auf der Arbeit oder an anderen Orten besser nachvollziehen, ob du kritische Kontaktpunkte hast.",
                         image: _buildImage('daily_contacts'),
                         decoration: pageDecoration,
                     ),
